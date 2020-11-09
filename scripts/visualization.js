@@ -34,3 +34,14 @@ $('#inputGroupFile02').on('change', function () {
         $('.toast').toast('show');
     });
 })
+
+const range = document.getElementById('myRange')
+const rangeV = document.getElementById('rangeV')
+const setValue = () => {
+    const newValue = Number((range.value - range.min + 270) * 100 / (range.max - range.min + 270))
+    const newPosition = 10 - (newValue * 0.5);
+    rangeV.innerHTML = `<span>${range.value}</span>`;
+    rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
+};
+document.addEventListener("DOMContentLoaded", setValue);
+range.addEventListener('input', setValue);
