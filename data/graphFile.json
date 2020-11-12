@@ -1,17 +1,17 @@
 {
   "nodes":[
-		{"name":"cluster 0","group":0},
-		{"name":"cluster 1","group":1},
-		{"name":"cluster 2","group":2},
-		{"name":"cluster 3","group":3}
+		{"id":"cluster 0","group":0},
+		{"id":"cluster 1","group":1},
+		{"id":"cluster 2","group":2},
+		{"id":"cluster 3","group":3}
 	],
 	"links":[
-		{"source":0,"target":1,"weight":1},
-		{"source":0,"target":2,"weight":3},
-        {"source":0,"target":3,"weight":1},
-        {"source":0,"target":4,"weight":5},
-        {"source":1,"target":2,"weight":6},
-        {"source":1,"target":3,"weight":1},
-        {"source":1,"target":4,"weight":2}
+		{"source":0,"target":1,"value":1},
+		{"source":0,"target":2,"value":3},
+        {"source":0,"target":3,"value":1},
+        {"source":0,"target":4,"value":5},
+        {"source":1,"target":2,"value":6},
+        {"source":1,"target":3,"value":1},
+        {"source":1,"target":4,"value":2}
 	]
 }

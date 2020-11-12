@@ -9,7 +9,7 @@ d3.json("../data/graphFile.json").then(function (data) {
 
     console.log(nodes)
 
-    const svg = d3.select('.graph-vis').append("svg")
+    const svg = d3.select('.column main-graph').append("svg")
         .attr("width", width)
         .attr("height", height)
 
