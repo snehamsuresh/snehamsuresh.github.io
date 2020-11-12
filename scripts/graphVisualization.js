@@ -1,47 +1,58 @@
 var width = 960,
     height = 500
 
-var svg = d3.select('.graph-vis').append("svg")
+d3.json("../data/graphFile.json").then(function(data) {
+    console.log(data);
+
+const links = data.links.map(d => Object.create(d));
+const nodes = data.nodes.map(d => Object.create(d));
+
+console.log(nodes)
+
+const svg = d3.select('.graph-vis').append("svg")
     .attr("width", width)
     .attr("height", height)
-    .style("background-color", "pink");
+    .style("background-color", "pink")
 
-var force = d3.forceSimulation()
-    .force('charge', d3.forceManyBody())
-    .force('center', d3.forceCenter(width / 2, height / 2));
+  const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id))
+      .force("charge", d3.forceManyBody())
+      .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("../data/graphFile.json", function(json) {
-  force
-      .nodes(json.nodes)
-      .links(json.links)
-      .start();
+  const link = svg.append("g")
+      .attr("stroke", "#999")
+      .attr("stroke-opacity", 0.6)
+    .selectAll("line")
+    .data(links)
+    .join("line")
+      .attr("stroke-width", d => Math.sqrt(d.value));
 
-  var link = svg.selectAll(".link")
-      .data(json.links)
-      .enter().append("line")
-      .attr("class", "link")
-      .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
+  const node = svg.append("g")
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5)
+    .selectAll("circle")
+    .data(nodes)
+    .join("circle")
+      .attr("r", 5)
+      .attr("fill", red)
+      .call(drag(simulation));
 
-  var node = svg.selectAll(".node")
-      .data(json.nodes)
-      .enter().append("g")
-      .attr("class", "node")
-      .call(force.drag);
+  node.append("title")
+      .text(d => d.id);
 
-  node.append("circle")
-      .attr("r","5");
+  simulation.on("tick", () => {
+    link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
 
-  node.append("text")
-      .attr("dx", 12)
-      .attr("dy", ".35em")
-      .text(function(d) { return d.name });
-
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    node
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
   });
+
+  invalidation.then(() =>
+   simulation.stop());
+
 });
