@@ -143,15 +143,50 @@
 
 .link {
     stroke: #aaa;
-  }
-  
+}
+
 .node text {
-  stroke:#333;
-  cursor:pointer;
-  }
-  
-.node circle{
-  stroke:#fff;
-  stroke-width:3px;
-  fill:#555;
-  }
+    stroke: #333;
+    cursor: pointer;
+}
+
+.node circle {
+    stroke: #fff;
+    stroke-width: 3px;
+    fill: #555;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.main-graph {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 400px;
+    /* Should be removed. Only for demonstration */
+}
+
+.sunburst-graph {
+    float: right;
+    width: 50%;
+    padding: 10px;
+    height: 400px;
+    /* Should be removed. Only for demonstration */
+}
+
+.patient-graph {
+    width: 100%;
+    padding: 10px;
+    height: 400px;
+    /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
