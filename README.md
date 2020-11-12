@@ -10,8 +10,8 @@ The goal here is to analyze the correct episode of care followed by the provider
 
 2. Download or Clone the code from the main branch
 
-3. Navigate the Project directory and start the server using the commands below for the respective application
+3. Navigate to the Project directory and start the server using the commands below for the respective application
     * python -m http.server 8000
     * live-server
 
-4. This should automatically open up a browser with the localhost server create, or manually open the browser and open localhost:{port_number_specified}
+4. This should automatically open up a browser with the localhost server created, or manually open the browser and open localhost:{port_number_specified}
