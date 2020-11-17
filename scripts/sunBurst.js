@@ -1,7 +1,7 @@
 var width = 500,
     height = 100
 
-let radius = width / 7
+let radius = width / 6
 
 arc = d3.arc()
     .startAngle(d => d.x0)
@@ -14,16 +14,16 @@ arc = d3.arc()
 let format = d3.format(",d")
 
 
-partition = data => {
-    const root = d3.hierarchy(data)
-        .sum(d => d.value)
-        .sort((a, b) => b.value - a.value);
-    return d3.partition()
-        .size([2 * Math.PI, root.height + 1])
-        (root);
-}
 
 d3.json("../data/sourceDetails.json").then(function (data) {
+    let partition = data => {
+        const root = d3.hierarchy(data)
+            .sum(d => d.value)
+            .sort((a, b) => b.value - a.value);
+        return d3.partition()
+            .size([2 * Math.PI, root.height + 1])
+            (root);
+    }
     const root = partition(data);
     color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
     root.each(d => d.current = d);
@@ -47,7 +47,7 @@ d3.json("../data/sourceDetails.json").then(function (data) {
 
     path.filter(d => d.children)
         .style("cursor", "pointer")
-    //.on("click", clicked);
+        .on("click", clicked);
 
     path.append("title")
         .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
@@ -69,7 +69,7 @@ d3.json("../data/sourceDetails.json").then(function (data) {
         .attr("r", radius)
         .attr("fill", "none")
         .attr("pointer-events", "all")
-    //.on("click", clicked);
+        .on("click", clicked);
 
     function clicked(event, p) {
         parent.datum(p.parent || root);
