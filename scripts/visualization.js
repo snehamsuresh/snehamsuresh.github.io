@@ -79,7 +79,10 @@ function getSignedRequest(file) {
 }
 
 function uploadFileToS3(file, signedRequest, url) {
-	fetch(signedRequest, { method: "PUT", body: file })
+	fetch(signedRequest, {
+			method: "PUT",
+			body: file
+		})
 		.then(function (response) {
 			if (response.status === 200) {
 				console.log("DONE!");
