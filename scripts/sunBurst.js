@@ -123,21 +123,6 @@ function showSunBurst(cluster_data) {
             const y = (d.y0 + d.y1) / 2 * radius;
             return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
         }
-
-        function mouseleave(d) {
-
-            // Deactivate all segments during transition.
-            //d3.selectAll("path").on("mouseover", null);
-
-            // Transition each segment to full opacity and then reactivate it.
-            d3.selectAll("path")
-                .transition()
-                .duration(200)
-                .style("opacity", 1)
-                .on("end", function () {
-                    d3.select(this).on("mouseover", mouseover);
-                });
-        }
     });
 };
 
