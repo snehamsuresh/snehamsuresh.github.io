@@ -1,38 +1,37 @@
-var width = 500,
-    height = 100
+function showSunBurst(data) {
+    const width = 300,
+        height = 300,
+        radius = width / 7
 
-let radius = width / 7
+    const arc = d3.arc()
+        .startAngle(d => d.x0)
+        .endAngle(d => d.x1)
+        .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+        .padRadius(radius * 1.5)
+        .innerRadius(d => d.y0 * radius)
+        .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
 
-arc = d3.arc()
-    .startAngle(d => d.x0)
-    .endAngle(d => d.x1)
-    .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-    .padRadius(radius * 1.5)
-    .innerRadius(d => d.y0 * radius)
-    .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
-
-let format = d3.format(",d")
-
-
-partition = data => {
-    const root = d3.hierarchy(data)
-        .sum(d => d.value)
-        .sort((a, b) => b.value - a.value);
-    return d3.partition()
-        .size([2 * Math.PI, root.height + 1])
-        (root);
-}
-
-d3.json("../data/sourceDetails.json").then(function (data) {
+    const partition = data => {
+        const root = d3.hierarchy(data)
+            .sum(d => d.value)
+            .sort((a, b) => b.value - a.value);
+        return d3.partition()
+            .size([2 * Math.PI, root.height + 1])
+            (root);
+    }
     const root = partition(data);
-    color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
+    const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
     root.each(d => d.current = d);
 
-    const svg = d3.select(".sunburst-graph").append("svg").attr("viewBox", [0, 0, width, width])
+    const svg = d3.select(".sunburst-graph")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("class", "sunburst-chart")
         .style("font", "10px sans-serif");
 
     const g = svg.append("g")
-        .attr("transform", `translate(${width / 2},${width / 2})`);
+        .attr("transform", `translate(${width / 2},${width / 2})`)
 
     const path = g.append("g")
         .selectAll("path")
@@ -43,14 +42,14 @@ d3.json("../data/sourceDetails.json").then(function (data) {
             return color(d.data.name);
         })
         .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
-        .attr("d", d => arc(d.current));
+        .attr("d", d => arc(d.current))
 
     path.filter(d => d.children)
         .style("cursor", "pointer")
-    //.on("click", clicked);
+        .on("click", clicked);
 
     path.append("title")
-        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
+        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
     const label = g.append("g")
         .attr("pointer-events", "none")
@@ -59,17 +58,27 @@ d3.json("../data/sourceDetails.json").then(function (data) {
         .selectAll("text")
         .data(root.descendants().slice(1))
         .join("text")
-        .attr("dy", "0.35em")
+        .attr("dy", "0.40em")
         .attr("fill-opacity", d => +labelVisible(d.current))
         .attr("transform", d => labelTransform(d.current))
         .text(d => d.data.name);
+
+    const cluster_number = svg.append("text")
+        .attr("id", "title")
+        .attr("x", (width / 2))
+        .attr("y", (width / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "1em")
+        .text(data.name)
 
     const parent = g.append("circle")
         .datum(root)
         .attr("r", radius)
         .attr("fill", "none")
         .attr("pointer-events", "all")
-    //.on("click", clicked);
+        .style("cursor", "pointer")
+        .on("click", clicked);
+
 
     function clicked(event, p) {
         parent.datum(p.parent || root);
@@ -83,9 +92,6 @@ d3.json("../data/sourceDetails.json").then(function (data) {
 
         const t = g.transition().duration(750);
 
-        // Transition the data on all arcs, even the ones that aren’t visible,
-        // so that if this transition is interrupted, entering arcs will start
-        // the next transition from the desired position.
         path.transition(t)
             .tween("data", d => {
                 const i = d3.interpolate(d.current, d.target);
@@ -117,4 +123,185 @@ d3.json("../data/sourceDetails.json").then(function (data) {
         const y = (d.y0 + d.y1) / 2 * radius;
         return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
     }
-});
+};
+
+function showBarChart(dataset) {
+    const margin = {
+            top: 40,
+            right: 30,
+            bottom: 30,
+            left: 50
+        },
+        width = 300 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
+
+    const greyColor = "#898989";
+    const barColor = d3.interpolateReds(0.4);
+    const highlightColor = d3.interpolateReds(0.3);
+
+    const svg = d3.select(".sunburst-graph").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    const x = d3.scaleBand()
+        .range([0, width])
+        .padding(0.2);
+
+    const y = d3.scaleLinear()
+        .range([height, 0]);
+
+    const xAxis = d3.axisBottom(x).tickSize([1]).tickPadding(10);
+    const yAxis = d3.axisLeft(y);
+
+    x.domain(dataset.map(d => {
+        return d.name;
+    }));
+    y.domain([0, d3.max(dataset, d => {
+        return d.value;
+    })]);
+
+    svg.append("g")
+        .attr("class", "x-axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y-axis")
+        .call(yAxis);
+
+    svg.selectAll(".bar")
+        .data(dataset)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .style("display", d => {
+            return d.value === null ? "none" : null;
+        })
+        .style("fill", d => {
+            return d.value === d3.max(dataset, d => {
+                    return d.value;
+                }) ?
+                highlightColor : barColor
+        })
+        .on("mouseover", function (event, data) {
+            d3.select(this).transition().duration(200).style('opacity', 0.5)
+        })
+        .on("mouseout", function (event, data) {
+            d3.select(this).transition().duration(200).style('opacity', 1)
+        })
+        .attr("x", d => {
+            return x(d.name);
+        })
+        .attr("width", x.bandwidth())
+        .attr("y", d => {
+            return height;
+        })
+        .attr("height", 0)
+        .transition()
+        .duration(750)
+        .delay(function (d, i) {
+            return i * 200;
+        })
+        .attr("y", d => {
+            return y(d.value);
+        })
+        .attr("height", d => {
+            return height - y(d.value);
+        })
+
+    svg.selectAll(".label")
+        .data(dataset)
+        .enter()
+        .append("text")
+        .attr("class", "label")
+        .style("display", d => {
+            return d.value === null ? "none" : null;
+        })
+        .attr("x", (d => {
+            return x(d.name) + (x.bandwidth() / 2) - 8;
+        }))
+        .style("fill", d => {
+            return d.value === d3.max(dataset, d => {
+                    return d.value;
+                }) ?
+                highlightColor : greyColor
+        })
+        .attr("y", d => {
+            return height;
+        })
+        .attr("height", 0)
+        .transition()
+        .duration(750)
+        .delay((d, i) => {
+            return i * 200;
+        })
+        .text(d => {
+            return (d.value);
+        })
+        .attr("y", d => {
+            return y(d.value) + .1;
+        })
+        .attr("dy", "-.5em");
+}
+
+const cluster_data = {
+    "name": "Cluster 1",
+    "children": [{
+            "name": "100101",
+            "children": [{
+                    "name": "456781",
+                    "children": [{
+                        "name": "102310",
+                        "value": 3938
+                    }]
+                },
+                {
+                    "name": "573910",
+                    "children": [{
+                        "name": "123454",
+                        "value": 3534
+                    }]
+                },
+                {
+                    "name": "105638",
+                    "children": [{
+                        "name": "684729",
+                        "value": 7074
+                    }]
+                }
+            ]
+        },
+        {
+            "name": "123421",
+            "children": [{
+                "name": "105839",
+                "value": 4116
+            }]
+        },
+        {
+            "name": "12323",
+            "children": [{
+                "name": "673493",
+                "value": 4116
+            }]
+        }
+    ]
+};
+const cluster_risk_data = [{
+        "name": "Low",
+        "value": 30
+    },
+    {
+        "name": "Moderate",
+        "value": 10
+    },
+    {
+        "name": "High",
+        "value": 40
+    }
+];
+
+showSunBurst(cluster_data);
+showBarChart(cluster_risk_data)
