@@ -109,15 +109,12 @@
                         <span class="fa fa fa-users fa-lg mr-4 text-white"></span>
                         <span class="menu-collapsed">
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Select a Patient
-                                </button>
+                                <select class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="getOption()">
+                                    <option label="Select a Patient">Select a Patient</option>
+                            </select>
                                 <!--TODO:Change dropdown in js based on the number of patients uploaded-->
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <div class="dropdown-item">Patient ID-1</div>
-                                    <div class="dropdown-item">Patient ID-2</div>
-                                    <div class="dropdown-item">Patient ID-3</div>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu">
                                 </div>
                             </div>
                         </span>
@@ -138,7 +135,12 @@
                 <div class="column main-graph">
                 </div>
                 <div class="column sunburst-graph">
-                    <p>Sunburst view of Souce and Targets</p>
+                    <p>Sunburst view of Source and Targets</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="patient-graph">
+                    <p>Individual patient graph</p>
                 </div>
             </div>
             <div aria-live="polite" aria-atomic="true" style="min-height: 200px;">
@@ -169,10 +171,13 @@
     </script>
     <!-- D3 Libraries-->
     <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-require@1"></script>
     <!-- Custom Javascipt files-->
     <script src="scripts/visualization.js"></script>
     <!-- <script src="scripts/graphVisualization.js"></script> -->
     <script src="scripts/sunBurst.js"></script>
+
+    <script src="scripts/graphVisualization.js"></script>
 
 </body>
 

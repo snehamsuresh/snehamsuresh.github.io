@@ -1,57 +1,180 @@
-var width = 100,
-    height = 200
+function showPatientGraph(data){
+    console.log(data)
 
-d3.json("../data/graphFile.json").then(function (data) {
-    console.log(data);
+    // d3 = require("d3")
 
-    const links = data.links.map(d => Object.create(d));
-    const nodes = data.nodes.map(d => Object.create(d));
+    const width = 300
 
-    console.log(nodes)
+    margin = ({top: 50, right: 50, bottom: 50, left: 50})
+    dx = 37
+    dy = width / 4
 
-    const svg = d3.select('.column main-graph').append("svg")
-        .attr("width", width)
-        .attr("height", height)
+    tree = d3.tree().nodeSize([dx, dy])
+    diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x)
 
-    const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id))
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(width / 2, height / 2));
+    const root = d3.hierarchy(data);
+    // console.log(root)
 
-    const link = svg.append("g")
-        .attr("stroke", "#999")
-        .attr("stroke-opacity", 0.6)
-        .selectAll("line")
-        .data(links)
-        .join("line")
-        .attr("stroke-width", d => Math.sqrt(d.value));
+    root.x0 = dy / 2;
+    root.y0 = 0;
+    root.descendants().forEach((d, i) => {
+    d.id = i;
+    d._children = d.children;
+    if (d.depth && d.data.name.length !== 7) d.children = null;
+  });
 
-    const node = svg.append("g")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1.5)
-        .selectAll("circle")
-        .data(nodes)
-        .join("circle")
-        .attr("r", 5)
-        .attr("fill", red)
-        .call(drag(simulation));
+  const svg = d3.select(".patient-graph").append("svg")
+      .attr("viewBox", [-margin.left, -margin.top, width, dx])
+      .style("font", "10px sans-serif")
+      .style("user-select", "none");
 
-    node.append("title")
-        .text(d => d.id);
+  const gLink = svg.append("g")
+      .attr("fill", "none")
+      .attr("stroke", "#555")
+      .attr("stroke-opacity", 0.4)
+      .attr("stroke-width", 1.5);
 
-    simulation.on("tick", () => {
-        link
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
+  const gNode = svg.append("g")
+      .attr("cursor", "pointer")
+      .attr("pointer-events", "all");
 
-        node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
+  function update(source) {
+    const duration = d3.event && d3.event.altKey ? 2500 : 250;
+    const nodes = root.descendants().reverse();
+    const links = root.links();
+
+    // Compute the new tree layout.
+    tree(root);
+
+    let left = root;
+    let right = root;
+    root.eachBefore(node => {
+      if (node.x < left.x) left = node;
+      if (node.x > right.x) right = node;
     });
 
-    invalidation.then(() =>
-        simulation.stop());
+    const height = right.x - left.x + margin.top + margin.bottom;
 
+    const transition = svg.transition()
+        .duration(duration)
+        .attr("viewBox", [-margin.left, left.x - margin.top, width, height])
+        .tween("resize", window.ResizeObserver ? null : () => () => svg.dispatch("toggle"));
+
+    // Update the nodes…
+    const node = gNode.selectAll("g")
+      .data(nodes, d => d.id);
+
+    // Enter any new nodes at the parent's previous position.
+    const nodeEnter = node.enter().append("g")
+        .attr("transform", d => `translate(${source.y0},${source.x0})`)
+        .attr("fill-opacity", 0)
+        .attr("stroke-opacity", 0)
+        .on("click", (event, d) => {
+          d.children = d.children ? null : d._children;
+          update(d);
+        });
+
+    nodeEnter.append("circle")
+        .attr("r", 18)
+        .attr("fill", d => d._children ? "#555" : "#999")
+        .attr("stroke-width", 10);
+
+    nodeEnter.append("text")
+        .style("font", "5.75px sans-serif")
+        .style('fill','white')
+        .attr("dy", "0.31em")
+        .attr("text-anchor", 'middle')
+        .text(d => d.data.name)
+      .clone(true).lower()
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-width", 3)
+        .attr("stroke", "white");
+
+    // Transition nodes to their new position.
+    const nodeUpdate = node.merge(nodeEnter).transition(transition)
+        .attr("transform", d => `translate(${d.y},${d.x})`)
+        .attr("fill-opacity", 1)
+        .attr("stroke-opacity", 1);
+
+    // Transition exiting nodes to the parent's new position.
+    const nodeExit = node.exit().transition(transition).remove()
+        .attr("transform", d => `translate(${source.y},${source.x})`)
+        .attr("fill-opacity", 0)
+        .attr("stroke-opacity", 0);
+
+    // Update the links…
+    const link = gLink.selectAll("path")
+      .data(links, d => d.target.id);
+
+    // Enter any new links at the parent's previous position.
+    const linkEnter = link.enter().append("path")
+        .attr("d", d => {
+          const o = {x: source.x0, y: source.y0};
+          return diagonal({source: o, target: o});
+        });
+
+    // Transition links to their new position.
+    link.merge(linkEnter).transition(transition)
+        .attr("d", diagonal);
+
+    // Transition exiting nodes to the parent's new position.
+    link.exit().transition(transition).remove()
+        .attr("d", d => {
+          const o = {x: source.x, y: source.y};
+          return diagonal({source: o, target: o});
+        });
+
+    // Stash the old positions for transition.
+    root.eachBefore(d => {
+      d.x0 = d.x;
+      d.y0 = d.y;
+    });
+  }
+
+  update(root);
+}
+
+
+Promise.all([d3.json("../data/patients.json")])
+        .then(([patientData]) => {
+        
+        //get the keys
+
+        patientId = []
+        for (var key in patientData) {
+            console.log(patientData[key].name)
+            patientId.push(patientData[key].name);
+        }
+        console.log(patientId)
+        //populate the drop down
+
+        // dropdown = document.querySelector('#dropdownMenu');
+        
+        patientId.forEach(patient => {
+          $('#dropdownMenu').append(`<option value="${patient}"> ${patient}</option>`); 
+            // dropdown.innerHTML += `<a class="dropdown-item" style="color:#333" href="#">${patient}</a>`;
+        })
+
+        // document.getElementsById("dropdownMenuButton")
+        // $(document).on('click', '.dropdown-menu .dropdown-item a', function() {
+        //     selectElement =  
+        //             document.querySelector('.dropdown-item  '); 
+                      
+        //     output = selectElement.value;
+        //     console.log(output);
+  
+        // }); 
+
+        function getOption() { 
+            selectElement =  document.getElementsById("dropdownMenuButton")
+                      
+            output = selectElement.value;
+  
+            document.querySelector('.output').textContent 
+                    = output; 
+        }
+        //pass only the selected dropdown key data
+
+        
+        showPatientGraph(patientData[0]);
 });
