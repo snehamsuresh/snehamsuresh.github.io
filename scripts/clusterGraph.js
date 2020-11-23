@@ -343,17 +343,35 @@ let dataCluster;
 
 async function initClustersGraph() {
 	dataCluster = await d3.json("../data/cluster_membership.json");
-	dataClusterEdge = await d3.json("../data/edges_data.json");
+	dataClusterEdge = await d3.json("../data/edges_data_new.json");
 
 	dataClusterEdge.edge_table.forEach((data) => {
-		data.community_membership = data.community_membership
+		data.latencies = data.latencies
 			.replace('"', "")
 			.replace("[", "")
 			.replace("]", "")
 			.split(", ");
 	});
+	const nodes = [];
+
+	dataClusterEdge.edge_table.forEach((data) => {
+		let source,
+			target = false;
+		if (data.source === data.target) {
+			if (!nodes.some((nodeData) => nodeData.id === data.source)) {
+				nodes.push({ id: data.source });
+			}
+		} else {
+			if (!nodes.some((nodeData) => nodeData.id === data.source)) source = true;
+			else if (!nodes.some((nodeData) => nodeData.id === data.target))
+				target = true;
+		}
+		if (source) nodes.push({ id: data.source });
+		if (target) nodes.push({ id: data.target });
+	});
 
 	console.log(dataClusterEdge);
+	console.log(nodes);
 
 	const backBtn = document.getElementById("clusterBackBtn");
 	const clusterGraphMain = document.getElementById("clusterMainGraph");
