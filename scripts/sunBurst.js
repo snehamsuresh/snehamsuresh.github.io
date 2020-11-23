@@ -1,6 +1,6 @@
 function showSunBurst(data) {
-    const width = 600,
-        height = 600,
+    const width = 450,
+        height = 450,
         radius = width / 7
 
     valueScale = d3.scaleLinear()
@@ -32,7 +32,7 @@ function showSunBurst(data) {
         .attr("width", width)
         .attr("height", height)
         .attr("class", "sunburst-chart")
-        .style("font", "10px sans-serif");
+        .style("font", "20px sans-serif");
 
     const g = svg.append("g")
         .attr("transform", `translate(${width / 2},${width / 2})`)
@@ -66,14 +66,14 @@ function showSunBurst(data) {
         .attr("fill-opacity", d => +labelVisible(d.current))
         .attr("transform", d => labelTransform(d.current))
         .text(d => d.data.name)
-        .style("font-size", "6px");
+        .style("font-size", "7.5px");
 
     const cluster_number = svg.append("text")
         .attr("id", "title")
         .attr("x", (width / 2))
         .attr("y", (width / 2))
         .attr("text-anchor", "middle")
-        .style("font-size", "1em")
+        .style("font-size", "0.8em")
         .text(data.name)
 
     const parent = g.append("circle")
@@ -95,7 +95,24 @@ function showSunBurst(data) {
             y1: Math.max(0, d.y1 - p.depth)
         });
 
+        d3.select("#center-text").remove()
+
         const t = g.transition().duration(750);
+
+        svg.append("text")
+            .data(p)
+            .attr("id", "title")
+            .attr("x", (width / 2))
+            .attr("y", (width / 2 + 20))
+            .attr("text-anchor", "middle")
+            .style("font-size", "0.5em")
+            .attr('id', "center-text")
+            .style("font-style", "italic")
+            .text(d => {
+                if (Number.isInteger(d.data.name)) {
+                    return "Source : " + d.data.name;
+                }
+            })
 
         path.transition(t)
             .tween("data", d => {
@@ -120,7 +137,7 @@ function showSunBurst(data) {
     }
 
     function labelVisible(d) {
-        return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
+        return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.08;
     }
 
     function labelTransform(d) {
@@ -137,18 +154,19 @@ function showBarChart(dataset) {
             bottom: 30,
             left: 50
         },
-        width = 300 - margin.left - margin.right,
-        height = 300 - margin.top - margin.bottom;
+        width = 200 - margin.left - margin.right,
+        height = 200 - margin.top - margin.bottom;
 
     const greyColor = "#898989";
     const barColor = d3.interpolateReds(0.4);
     const highlightColor = d3.interpolateReds(0.3);
 
-    const svg = d3.select(".sunburst-graph").append("svg")
+    const svg = d3.select(".bar-chart").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .attr("class", "bar-chart")
 
     const x = d3.scaleBand()
         .range([0, width])
@@ -250,26 +268,24 @@ function showBarChart(dataset) {
         })
         .attr("dy", "-.5em");
 }
-const cluster_risk_data = [{
-        "name": "Low",
-        "value": 30
-    },
-    {
-        "name": "Moderate",
-        "value": 10
-    },
-    {
-        "name": "High",
-        "value": 40
-    }
-];
 
-d3.json("data/temp.json")
-    .then((data) => {
-        let cluster_data = data
-        showSunBurst(cluster_data);
-        //showBarChart(cluster_risk_data)
-    })
-    .catch((error) => {
-        console.error("Error loading the data");
-    });
+async function sunBurstAndGraph() {
+    sunburstData = await d3.json('../data/temp.json');
+    const clusterRiskData = [{
+            "name": "Low",
+            "value": 30
+        },
+        {
+            "name": "Moderate",
+            "value": 10
+        },
+        {
+            "name": "High",
+            "value": 40
+        }
+    ];
+    showSunBurst(sunburstData);
+    showBarChart(clusterRiskData)
+}
+
+sunBurstAndGraph()
