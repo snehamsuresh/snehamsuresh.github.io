@@ -1,7 +1,11 @@
 function showSunBurst(data) {
-    const width = 300,
-        height = 300,
+    const width = 600,
+        height = 600,
         radius = width / 7
+
+    valueScale = d3.scaleLinear()
+        .domain([0, 45])
+        .range([100, 1000])
 
     const arc = d3.arc()
         .startAngle(d => d.x0)
@@ -13,7 +17,7 @@ function showSunBurst(data) {
 
     const partition = data => {
         const root = d3.hierarchy(data)
-            .sum(d => d.value)
+            .sum(d => valueScale(d.value))
             .sort((a, b) => b.value - a.value);
         return d3.partition()
             .size([2 * Math.PI, root.height + 1])
@@ -61,7 +65,8 @@ function showSunBurst(data) {
         .attr("dy", "0.40em")
         .attr("fill-opacity", d => +labelVisible(d.current))
         .attr("transform", d => labelTransform(d.current))
-        .text(d => d.data.name);
+        .text(d => d.data.name)
+        .style("font-size", "6px");
 
     const cluster_number = svg.append("text")
         .attr("id", "title")
@@ -245,50 +250,6 @@ function showBarChart(dataset) {
         })
         .attr("dy", "-.5em");
 }
-
-const cluster_data = {
-    "name": "Cluster 1",
-    "children": [{
-            "name": "100101",
-            "children": [{
-                    "name": "456781",
-                    "children": [{
-                        "name": "102310",
-                        "value": 3938
-                    }]
-                },
-                {
-                    "name": "573910",
-                    "children": [{
-                        "name": "123454",
-                        "value": 3534
-                    }]
-                },
-                {
-                    "name": "105638",
-                    "children": [{
-                        "name": "684729",
-                        "value": 7074
-                    }]
-                }
-            ]
-        },
-        {
-            "name": "123421",
-            "children": [{
-                "name": "105839",
-                "value": 4116
-            }]
-        },
-        {
-            "name": "12323",
-            "children": [{
-                "name": "673493",
-                "value": 4116
-            }]
-        }
-    ]
-};
 const cluster_risk_data = [{
         "name": "Low",
         "value": 30
@@ -303,5 +264,12 @@ const cluster_risk_data = [{
     }
 ];
 
-showSunBurst(cluster_data);
-showBarChart(cluster_risk_data)
+d3.json("data/temp.json")
+    .then((data) => {
+        let cluster_data = data
+        showSunBurst(cluster_data);
+        //showBarChart(cluster_risk_data)
+    })
+    .catch((error) => {
+        console.error("Error loading the data");
+    });
