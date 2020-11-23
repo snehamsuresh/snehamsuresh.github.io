@@ -108,14 +108,12 @@
                     <div class="d-flex w-100 justify-content-start align-items-center">
                         <span class="fa fa fa-users fa-lg mr-4 text-white"></span>
                         <span class="menu-collapsed">
-                            <div class="dropdown">
-                                <select class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="getOption()">
+                            <div class="dropdown" aria-labelledby="dropdownMenu">
+                                <select class="btn btn-secondary dropdown-toggle" id="dropdownMenu"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    onchange="getOption()">
                                     <option label="Select a Patient">Select a Patient</option>
-                            </select>
-                                <!--TODO:Change dropdown in js based on the number of patients uploaded-->
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu">
-                                </div>
+                                </select>
                             </div>
                         </span>
                     </div>
