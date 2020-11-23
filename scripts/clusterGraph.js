@@ -339,80 +339,116 @@ const data = {
 const widthCluster = 500,
 	heightCluster = 500;
 
-const links = data.links.map((d) => Object.create(d));
-const nodes = data.nodes.map((d) => Object.create(d));
-const scale = d3.scaleOrdinal(d3.schemeDark2);
+let dataCluster;
 
-const colorCluster = (d) => {
-	console.log(scale(d.group));
-	return scale(d.group);
-};
+async function initClustersGraph() {
+	dataCluster = await d3.json("../data/cluster_membership.json");
+	dataClusterEdge = await d3.json("../data/edges_data.json");
 
-const drag = (simulation) => {
-	function dragstarted(event) {
-		if (!event.active) simulation.alphaTarget(0.3).restart();
-		event.subject.fx = event.subject.x;
-		event.subject.fy = event.subject.y;
-	}
+	dataClusterEdge.edge_table.forEach((data) => {
+		data.community_membership = data.community_membership
+			.replace('"', "")
+			.replace("[", "")
+			.replace("]", "")
+			.split(", ");
+	});
 
-	function dragged(event) {
-		event.subject.fx = event.x;
-		event.subject.fy = event.y;
-	}
+	console.log(dataClusterEdge);
 
-	function dragended(event) {
-		if (!event.active) simulation.alphaTarget(0);
-		event.subject.fx = null;
-		event.subject.fy = null;
-	}
+	const backBtn = document.getElementById("clusterBackBtn");
+	const clusterGraphMain = document.getElementById("clusterMainGraph");
 
-	return d3
-		.drag()
-		.on("start", dragstarted)
-		.on("drag", dragged)
-		.on("end", dragended);
-};
+	const linkExtent = d3.extent(dataCluster.links.map((data) => data.value));
+	const linkValue = d3.scaleOrdinal().domain(linkExtent).range([1, 10]);
+	console.log(linkExtent);
+	const scale = d3.scaleOrdinal(d3.schemeDark2);
 
-const simulation = d3
-	.forceSimulation(data.nodes)
-	.force(
-		"link",
-		d3.forceLink(links).id((d) => d.id)
-	)
-	.force("charge", d3.forceManyBody())
-	.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2));
+	const colorCluster = (d) => {
+		console.log(scale(d.group));
+		return scale(d.group);
+	};
 
-const svg = d3
-	.select(".main-graph")
-	.append("svg")
-	.attr("viewBox", [0, 0, widthCluster, heightCluster]);
+	const drag = (simulation) => {
+		function dragstarted(event) {
+			if (!event.active) simulation.alphaTarget(0.3).restart();
+			event.subject.fx = event.subject.x;
+			event.subject.fy = event.subject.y;
+		}
 
-const link = svg
-	.append("g")
-	.attr("stroke", "#666")
-	.attr("stroke-opacity", 1)
-	.selectAll("line")
-	.data(links)
-	.join("line")
-	.attr("stroke-width", (d) => Math.sqrt(d.value));
+		function dragged(event) {
+			event.subject.fx = event.x;
+			event.subject.fy = event.y;
+		}
 
-const node = svg
-	.append("g")
-	.attr("stroke", "#fff")
-	.attr("stroke-width", 1.5)
-	.selectAll("circle")
-	.data(data.nodes)
-	.join("circle")
-	.attr("r", 5)
-	.attr("fill", colorCluster)
-	.call(drag(simulation));
+		function dragended(event) {
+			if (!event.active) simulation.alphaTarget(0);
+			event.subject.fx = null;
+			event.subject.fy = null;
+		}
 
-simulation.on("tick", () => {
-	link
-		.attr("x1", (d) => d.source.x)
-		.attr("y1", (d) => d.source.y)
-		.attr("x2", (d) => d.target.x)
-		.attr("y2", (d) => d.target.y);
+		return d3
+			.drag()
+			.on("start", dragstarted)
+			.on("drag", dragged)
+			.on("end", dragended);
+	};
 
-	node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
-});
+	const simulation = d3
+		.forceSimulation(dataCluster.nodes)
+		.force(
+			"link",
+			d3
+				.forceLink(dataCluster.links)
+				.id((d) => d.id)
+				.distance(200)
+		)
+		.force("charge", d3.forceManyBody())
+		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2));
+
+	const toggleDisplay = () => {
+		backBtn.classList.toggle("d-none");
+		clusterGraphMain.classList.toggle("d-none");
+	};
+
+	backBtn.addEventListener("click", () => {
+		toggleDisplay();
+	});
+
+	const svg = d3
+		.select(".main-graph")
+		.append("svg")
+		.attr("viewBox", [0, 0, widthCluster, heightCluster]);
+
+	const link = svg
+		.append("g")
+		.attr("stroke", "#666")
+		.attr("stroke-opacity", 0.6)
+		.selectAll("line")
+		.data(dataCluster.links)
+		.join("line")
+		.attr("stroke-width", (d) => linkValue(d.value) * 1.5);
+
+	const node = svg
+		.append("g")
+		.attr("stroke", "#fff")
+		.attr("stroke-width", 1.5)
+		.selectAll("circle")
+		.data(dataCluster.nodes)
+		.join("circle")
+		.attr("r", 35)
+		.attr("fill", colorCluster)
+		.call(drag(simulation))
+		.on("click", toggleDisplay);
+
+	simulation.on("tick", () => {
+		link
+			.attr("x1", (d) => d.source.x + 1)
+			.attr("y1", (d) => d.source.y + 1)
+			.attr("x2", (d) => d.target.x + 1)
+			.attr("y2", (d) => d.target.y + 1);
+
+		node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+	});
+}
+
+initClustersGraph();
