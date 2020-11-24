@@ -1,7 +1,4 @@
 function showPatientGraph(data){
-    console.log(data)
-
-    // d3 = require("d3")
 
     const width = 300
 
@@ -13,7 +10,6 @@ function showPatientGraph(data){
     diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x)
 
     const root = d3.hierarchy(data);
-    // console.log(root)
 
     root.x0 = dy / 2;
     root.y0 = 0;
@@ -23,11 +19,15 @@ function showPatientGraph(data){
     if (d.depth && d.data.name.length !== 7) d.children = null;
   });
 
+  d3.select(".patient-svg").transition().duration(200).remove();
+  
   const svg = d3.select(".patient-graph").append("svg")
       .attr("viewBox", [-margin.left, -margin.top, width, dx])
       .style("font", "10px sans-serif")
-      .style("user-select", "none");
+      .style("user-select", "none")
+      .attr("class","patient-svg");
 
+    
   const gLink = svg.append("g")
       .attr("fill", "none")
       .attr("stroke", "#555")
@@ -63,6 +63,7 @@ function showPatientGraph(data){
     // Update the nodes…
     const node = gNode.selectAll("g")
       .data(nodes, d => d.id);
+
 
     // Enter any new nodes at the parent's previous position.
     const nodeEnter = node.enter().append("g")
@@ -139,42 +140,23 @@ Promise.all([d3.json("../data/patients.json")])
         .then(([patientData]) => {
         
         //get the keys
-
+        
         patientId = []
         for (var key in patientData) {
-            console.log(patientData[key].name)
             patientId.push(patientData[key].name);
         }
-        console.log(patientId)
+       
         //populate the drop down
-
-        // dropdown = document.querySelector('#dropdownMenu');
         
         patientId.forEach(patient => {
           $('#dropdownMenu').append(`<option value="${patient}"> ${patient}</option>`); 
-            // dropdown.innerHTML += `<a class="dropdown-item" style="color:#333" href="#">${patient}</a>`;
-        })
+        }) 
 
-        // document.getElementsById("dropdownMenuButton")
-        // $(document).on('click', '.dropdown-menu .dropdown-item a', function() {
-        //     selectElement =  
-        //             document.querySelector('.dropdown-item  '); 
-                      
-        //     output = selectElement.value;
-        //     console.log(output);
-  
-        // }); 
-
-        function getOption() { 
-            selectElement =  document.getElementsById("dropdownMenuButton")
-                      
-            output = selectElement.value;
-  
-            document.querySelector('.output').textContent 
-                    = output; 
-        }
-        //pass only the selected dropdown key data
-
+            selectElement =  document.getElementById("dropdownMenu")
+            selectElement.onchange = function(){
+                output = selectElement.value;
+                let selectedPatient = patientData.find(x => x.name === output)
+                showPatientGraph(selectedPatient);
+            }               
         
-        showPatientGraph(patientData[0]);
 });
