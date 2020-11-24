@@ -67,6 +67,10 @@
     padding-left: 10px;
 }
 
+.dropdown-toggle {
+    width: 100%;
+}
+
 .slidecontainer {
     width: 200%;
 }
@@ -178,4 +182,10 @@
 svg-1 {
     width: 300px;
     height: 300px;
+}
+
+.patient-graph {
+    padding: 10px;
+    height: 800px;
+    width: 500px;
 }
