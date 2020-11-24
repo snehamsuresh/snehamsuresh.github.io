@@ -83,8 +83,8 @@
     background: #d3d3d3;
     outline: none;
     opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
 }
 
 .slider:hover {
@@ -164,24 +164,36 @@
     box-sizing: border-box;
 }
 
-/* Create two equal columns that floats next to each other */
 .main-graph {
     float: left;
-    padding: 10px;
-    height: 600px;
-    /* Should be removed. Only for demonstration */
 }
 
 .sunburst-graph {
-    float: right;
-    padding: 10px;
-    height: 600px;
-    /* Should be removed. Only for demonstration */
+    float: left;
 }
 
-svg-1 {
-    width: 300px;
-    height: 300px;
+.bar-chart {
+    position: absolute;
+    margin-left: 400px;
+}
+
+div.tooltip {
+    color: white;
+    position: absolute;
+    width: 130px;
+    height: 40px;
+    padding-left: 10px;
+    padding-top: 5px;
+    font: 12px sans-serif;
+    background: white;
+    opacity: 0.2;
+    border: 2px solid black;
+    border-radius: 1px 30px 30px 30px;
+    pointer-events: none;
+}
+
+div.tooltip>span {
+    color: black;
 }
 
 .patient-graph {
