@@ -172,3 +172,22 @@
     position: fixed;
     margin-left: 400px;
 }
+
+div.tooltip {
+    color: white;
+    position: absolute;
+    width: 130px;
+    height: 40px;
+    padding-left: 10px;
+    padding-top: 5px;
+    font: 12px sans-serif;
+    background: white;
+    opacity: 0.2;
+    border: 2px solid black;
+    border-radius: 1px 30px 30px 30px;
+    pointer-events: none;
+}
+
+div.tooltip>span {
+    color: black;
+}

@@ -50,10 +50,12 @@ function showSunBurst(data) {
 
     path.filter(d => d.children)
         .style("cursor", "pointer")
-        .on("click", clicked);
+        .on("mouseover", souceHovered)
+        .on("mouseout", sourceHoveredOut)
+        .on("click", clicked)
 
-    path.append("title")
-        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+    // path.append("title")
+    //     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
     const label = g.append("g")
         .attr("pointer-events", "none")
@@ -144,6 +146,27 @@ function showSunBurst(data) {
         const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
         const y = (d.y0 + d.y1) / 2 * radius;
         return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+    }
+
+    function souceHovered(d, i) {
+        toolTip.transition().duration(200)
+            .style('opacity', 0.9);
+        toolTip.html(generateTipData(i))
+            .style('left', d.pageX + 'px')
+            .style('top', d.pageY + 'px');
+    }
+
+    function generateTipData(nodeData) {
+        clusterInfo = nodeData.parent.data.name.split("-")[1]
+        text = `<span>Cluster: ` + clusterInfo + `</span>
+                <br/><span>Source: ` + nodeData.data.name + `</span>`;
+        return text;
+    }
+
+    function sourceHoveredOut(d, i) {
+        toolTip.transition()
+            .duration(500)
+            .style('opacity', 0);
     }
 };
 
