@@ -173,7 +173,7 @@
 }
 
 .bar-chart {
-    position: fixed;
+    position: absolute;
     margin-left: 400px;
 }
 
@@ -192,18 +192,12 @@ div.tooltip {
     pointer-events: none;
 }
 
-<<<<<<< HEAD
 div.tooltip>span {
     color: black;
-=======
-svg-1 {
-    width: 300px;
-    height: 300px;
 }
 
 .patient-graph {
     padding: 10px;
     height: 800px;
     width: 500px;
->>>>>>> 1fc9116b8f8b43b589931b241453db8d2073edca
 }
