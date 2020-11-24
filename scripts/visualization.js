@@ -4,7 +4,7 @@ $("#body-row .collapse").collapse("hide");
 // Collapse/Expand icon
 $("#collapse-icon").addClass("fa-angle-double-left");
 
-// Collapse click
+SidebarCollapse();
 $("[data-toggle=sidebar-colapse]").click(function () {
 	SidebarCollapse();
 });
@@ -95,3 +95,9 @@ function uploadFileToS3(file, signedRequest, url) {
 			console.log("Fetch Error :-S", err);
 		});
 }
+
+const toolTip = d3
+	.select('body')
+	.append('div')
+	.attr('class', 'tooltip')
+	.style('opacity', 0);
