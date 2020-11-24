@@ -178,10 +178,10 @@
 }
 
 div.tooltip {
-    color: white;
+    color: black;
     position: absolute;
-    width: 130px;
-    height: 40px;
+    width: 170px;
+    height: 80px;
     padding-left: 10px;
     padding-top: 5px;
     font: 12px sans-serif;
@@ -192,9 +192,6 @@ div.tooltip {
     pointer-events: none;
 }
 
-div.tooltip>span {
-    color: black;
-}
 
 .patient-graph {
     padding: 10px;

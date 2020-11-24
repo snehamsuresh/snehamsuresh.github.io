@@ -50,12 +50,11 @@ function showSunBurst(data) {
 
     path.filter(d => d.children)
         .style("cursor", "pointer")
-        .on("mouseover", souceHovered)
-        .on("mouseout", sourceHoveredOut)
+
         .on("click", clicked)
 
-    // path.append("title")
-    //     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+    path.on("mouseover", hovered)
+        .on("mouseout", hoveredOut)
 
     const label = g.append("g")
         .attr("pointer-events", "none")
@@ -148,22 +147,34 @@ function showSunBurst(data) {
         return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
     }
 
-    function souceHovered(d, i) {
+    function hovered(d, i) {
         toolTip.transition().duration(200)
             .style('opacity', 0.9);
-        toolTip.html(generateTipData(i))
+        toolTip.html(generateToolTipData(i))
             .style('left', d.pageX + 'px')
             .style('top', d.pageY + 'px');
     }
 
-    function generateTipData(nodeData) {
-        clusterInfo = nodeData.parent.data.name.split("-")[1]
-        text = `<span>Cluster: ` + clusterInfo + `</span>
-                <br/><span>Source: ` + nodeData.data.name + `</span>`;
+    function generateToolTipData(nodeData) {
+        let text;
+        if (nodeData.depth == 2) {
+            text = `<table>
+                            <tr><td>Source: </td><td>` + nodeData.parent.data.name + `</td></tr>
+                            <tr><td>Target: </td><td>` + nodeData.data.name + `</td></tr>
+                            <tr><td> Transition Prob: </td><td>` + nodeData.data.value + `</td> </tr>
+                    </table>`
+        } else {
+            let clusterInfo = nodeData.parent.data.name.split("-")[1]
+            text = `<table>
+                            <tr><td>Cluster: </td><td>` + clusterInfo + `</td></tr>
+                            <tr><td>Source: </td><td>` + nodeData.data.name + `</td></tr>
+                            <tr><td>No of Targets: </td><td>` + nodeData.data.children.length + `</td> </tr>
+                    </table>`
+        }
         return text;
     }
 
-    function sourceHoveredOut(d, i) {
+    function hoveredOut(d, i) {
         toolTip.transition()
             .duration(500)
             .style('opacity', 0);
