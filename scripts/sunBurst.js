@@ -1,4 +1,7 @@
-function showSunBurst(data) {
+function showSunBurst(clusterId, data) {
+    d3.select('.sunburst-chart').remove()
+    data = prepareSunBurstData(clusterId, data);
+
     const width = 450,
         height = 450,
         radius = width / 7
@@ -32,7 +35,7 @@ function showSunBurst(data) {
         .attr("width", width)
         .attr("height", height)
         .attr("class", "sunburst-chart")
-        .style("font", "20px sans-serif");
+        .style("font", "20px sans-serif")
 
     const g = svg.append("g")
         .attr("transform", `translate(${width / 2},${width / 2})`)
@@ -113,7 +116,7 @@ function showSunBurst(data) {
                 if (Number.isInteger(d.data.name)) {
                     return "Source : " + d.data.name;
                 }
-            })
+            });
 
         path.transition(t)
             .tween("data", d => {
@@ -180,6 +183,31 @@ function showSunBurst(data) {
             .style('opacity', 0);
     }
 };
+
+function prepareSunBurstData(clusterId, data) {
+    let indClusterData = {}
+    indClusterData = {
+        "name": `Cluster-${clusterId}`,
+        "children": []
+    };
+    data.forEach(clusterElement => {
+        if (indClusterData.children.findIndex(source => source.name == clusterElement.source) === -1) {
+            indClusterData.children.push({
+                "name": +clusterElement.source,
+                "children": []
+            });
+        }
+        indClusterData.children.forEach(source => {
+            if (source.name == clusterElement.source) {
+                source.children.push({
+                    "name": +clusterElement.target,
+                    "value": +clusterElement.transition_probabilities
+                })
+            }
+        });
+    });
+    return indClusterData;
+}
 
 function showBarChart(dataset) {
     const margin = {
@@ -318,7 +346,7 @@ async function sunBurstAndGraph() {
             "value": 40
         }
     ];
-    showSunBurst(sunburstData);
+    //showSunBurst(sunburstData);
     showBarChart(clusterRiskData)
 }
 

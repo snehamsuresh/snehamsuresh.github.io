@@ -41,13 +41,17 @@ const showClusterIndepthGraph = (id) => {
 
 	dataClusterEdge.nodes.forEach((data) => {
 		if (data.communityMembership.includes(id.toString())) {
-			nodesIndepth.push({ ...data });
+			nodesIndepth.push({
+				...data
+			});
 		}
 	});
 
 	dataClusterEdge.links.forEach((data) => {
 		if (data.community_membership.includes(id.toString())) {
-			linksIndepth.push({ ...data });
+			linksIndepth.push({
+				...data
+			});
 		}
 	});
 
@@ -57,18 +61,22 @@ const showClusterIndepthGraph = (id) => {
 				id: linkData.target,
 				communityMembership: linkData.community_membership,
 			};
-			nodesIndepth.push({ ...remainingNodeData });
+			nodesIndepth.push({
+				...remainingNodeData
+			});
 		}
 	});
+	showSunBurst(id, linksIndepth);
+
 
 	const simulationClusterInDepth = d3
 		.forceSimulation(nodesIndepth)
 		.force(
 			"link",
 			d3
-				.forceLink(linksIndepth)
-				.id((d) => d.id)
-				.distance(250)
+			.forceLink(linksIndepth)
+			.id((d) => d.id)
+			.distance(250)
 		)
 		.force("charge", d3.forceManyBody())
 		.force(
@@ -166,9 +174,9 @@ async function initClustersGraph() {
 		.force(
 			"link",
 			d3
-				.forceLink(dataCluster.links)
-				.id((d) => d.id)
-				.distance(200)
+			.forceLink(dataCluster.links)
+			.id((d) => d.id)
+			.distance(200)
 		)
 		.force("charge", d3.forceManyBody())
 		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2));
