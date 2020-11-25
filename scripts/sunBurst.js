@@ -206,14 +206,17 @@ function prepareData(clusterId, data) {
         });
     });
     showSunBurst(clusterId, indClusterData);
-    let indBarData = []
     let counts = _.countBy(data, data => data.risk_classification)
-    for (const risk in counts) {
-        indBarData.push({
-            "name": risk,
-            "value": counts[risk]
-        })
-    };
+    indBarData = [{
+        "name": "Low",
+        "value": counts["Low"]
+    }, {
+        "name": "Moderate",
+        "value": counts["Moderate"]
+    }, {
+        "name": "High",
+        "value": counts["High"]
+    }];
     showBarChart(indBarData);
 }
 
