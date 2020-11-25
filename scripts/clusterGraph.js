@@ -66,7 +66,7 @@ const showClusterIndepthGraph = (id) => {
 			});
 		}
 	});
-	showSunBurst(id, linksIndepth);
+	prepareData(id, linksIndepth);
 
 
 	const simulationClusterInDepth = d3

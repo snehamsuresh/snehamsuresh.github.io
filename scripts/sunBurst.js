@@ -1,6 +1,5 @@
 function showSunBurst(clusterId, data) {
     d3.select('.sunburst-chart').remove()
-    data = prepareSunBurstData(clusterId, data);
 
     const width = 450,
         height = 450,
@@ -184,7 +183,7 @@ function showSunBurst(clusterId, data) {
     }
 };
 
-function prepareSunBurstData(clusterId, data) {
+function prepareData(clusterId, data) {
     let indClusterData = {}
     indClusterData = {
         "name": `Cluster-${clusterId}`,
@@ -206,10 +205,20 @@ function prepareSunBurstData(clusterId, data) {
             }
         });
     });
-    return indClusterData;
+    showSunBurst(clusterId, indClusterData);
+    let indBarData = []
+    let counts = _.countBy(data, data => data.risk_classification)
+    for (const risk in counts) {
+        indBarData.push({
+            "name": risk,
+            "value": counts[risk]
+        })
+    };
+    showBarChart(indBarData);
 }
 
 function showBarChart(dataset) {
+    d3.select('.bar-graph').remove()
     const margin = {
             top: 40,
             right: 30,
@@ -223,12 +232,15 @@ function showBarChart(dataset) {
     const barColor = d3.interpolateReds(0.4);
     const highlightColor = d3.interpolateReds(0.3);
 
-    const svg = d3.select(".bar-chart").append("svg")
+    const svg = d3.select(".bar-chart")
+        .append("div")
+        .attr("class", "bar-graph")
+        .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .attr("class", "bar-chart")
+        .attr("class", "bar-svg-graph")
 
     const x = d3.scaleBand()
         .range([0, width])
@@ -330,24 +342,3 @@ function showBarChart(dataset) {
         })
         .attr("dy", "-.5em");
 }
-
-async function sunBurstAndGraph() {
-    sunburstData = await d3.json('../data/temp.json');
-    const clusterRiskData = [{
-            "name": "Low",
-            "value": 30
-        },
-        {
-            "name": "Moderate",
-            "value": 10
-        },
-        {
-            "name": "High",
-            "value": 40
-        }
-    ];
-    //showSunBurst(sunburstData);
-    showBarChart(clusterRiskData)
-}
-
-sunBurstAndGraph()
