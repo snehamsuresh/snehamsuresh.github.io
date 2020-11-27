@@ -167,7 +167,6 @@ async function initClustersGraph() {
 
 	const linkExtent = d3.extent(dataCluster.links.map((data) => data.value));
 	const linkValue = d3.scaleOrdinal().domain(linkExtent).range([1, 10]);
-	console.log(linkExtent);
 
 	const simulationCluster = d3
 		.forceSimulation(dataCluster.nodes)
