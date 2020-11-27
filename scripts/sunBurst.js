@@ -1,8 +1,8 @@
-function showSunBurst(clusterId, data) {
+function showSunBurst(data) {
     d3.select('.sunburst-chart').remove()
 
-    const width = 450,
-        height = 450,
+    const width = 350,
+        height = 350,
         radius = width / 7
 
     valueScale = d3.scaleLinear()
@@ -69,7 +69,7 @@ function showSunBurst(clusterId, data) {
         .attr("fill-opacity", d => +labelVisible(d.current))
         .attr("transform", d => labelTransform(d.current))
         .text(d => d.data.name)
-        .style("font-size", "7.5px");
+        .style("font-size", "7px");
 
     const cluster_number = svg.append("text")
         .attr("id", "title")
@@ -205,7 +205,7 @@ function prepareData(clusterId, data) {
             }
         });
     });
-    showSunBurst(clusterId, indClusterData);
+    showSunBurst(indClusterData);
     let counts = _.countBy(data, data => data.risk_classification)
     indBarData = [{
         "name": "Low",

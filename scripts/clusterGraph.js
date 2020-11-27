@@ -1,5 +1,5 @@
-const widthCluster = 500,
-	heightCluster = 500;
+const widthCluster = 400,
+	heightCluster = 400;
 
 let dataCluster;
 let dataClusterEdge;
@@ -176,7 +176,7 @@ async function initClustersGraph() {
 			d3
 			.forceLink(dataCluster.links)
 			.id((d) => d.id)
-			.distance(200)
+			.distance(150)
 		)
 		.force("charge", d3.forceManyBody())
 		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2));
@@ -194,7 +194,8 @@ async function initClustersGraph() {
 	const svgCluster = d3
 		.select(".main-graph")
 		.append("svg")
-		.attr("viewBox", [0, 0, widthCluster, heightCluster]);
+		.attr("width", widthCluster)
+		.attr("height", heightCluster)
 
 	const linkCluster = svgCluster
 		.append("g")
@@ -212,7 +213,7 @@ async function initClustersGraph() {
 		.selectAll("circle")
 		.data(dataCluster.nodes)
 		.join("circle")
-		.attr("r", 35)
+		.attr("r", 20)
 		.attr("fill", (data) => colorCluster(data.id))
 		.call(drag(simulationCluster))
 		.on("click", (mouseEvent, data) => {

@@ -4,7 +4,6 @@ $("#body-row .collapse").collapse("hide");
 // Collapse/Expand icon
 $("#collapse-icon").addClass("fa-angle-double-left");
 
-SidebarCollapse();
 $("[data-toggle=sidebar-colapse]").click(function () {
 	SidebarCollapse();
 });
@@ -50,6 +49,14 @@ const setValue = () => {
 };
 document.addEventListener("DOMContentLoaded", setValue);
 range.addEventListener("input", setValue);
+
+const min = range.min
+const max = range.max
+const value = range.value
+range.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${(value-min)/(max-min)*100}%, #DEE2E6 ${(value-min)/(max-min)*100}%, #DEE2E6 100%)`
+range.oninput = function () {
+	this.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${(this.value-this.min)/(this.max-this.min)*100}%, #DEE2E6 ${(this.value-this.min)/(this.max-this.min)*100}%, #DEE2E6 100%)`
+};
 
 //Upload Files to S3
 function uploadFile() {
