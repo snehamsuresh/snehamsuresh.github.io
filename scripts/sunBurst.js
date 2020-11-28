@@ -1,4 +1,4 @@
-function showSunBurst(data) {
+function showSunBurst(clusterId, data) {
     d3.select('.sunburst-chart').remove()
 
     const width = 350,
@@ -26,7 +26,7 @@ function showSunBurst(data) {
             (root);
     }
     const root = partition(data);
-    const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
+    const color = d3.scaleOrdinal(d3.quantize(customInterpolater(clusterId), data.children.length + 1).reverse())
     root.each(d => d.current = d);
 
     const svg = d3.select(".sunburst-graph")
@@ -181,6 +181,29 @@ function showSunBurst(data) {
             .duration(500)
             .style('opacity', 0);
     }
+
+    function customInterpolater(clusterId) {
+        switch (clusterId) {
+            case 0:
+                return d3.interpolateBlues;
+            case 1:
+                return d3.interpolateOranges
+            case 2:
+                return d3.interpolateGreens
+            case 3:
+                return d3.interpolateReds
+            case 4:
+                return d3.interpolatePurples
+            case 5:
+                return d3.interpolateYlOrBr
+            case 6:
+                return d3.interpolateRdPu
+            case 7:
+                return d3.interpolateYlGn
+            case 8:
+                return d3.interpolateGnBu
+        }
+    }
 };
 
 function prepareData(clusterId, data) {
@@ -205,7 +228,7 @@ function prepareData(clusterId, data) {
             }
         });
     });
-    showSunBurst(indClusterData);
+    showSunBurst(clusterId, indClusterData);
     let counts = _.countBy(data, data => data.risk_classification)
     indBarData = [{
         "name": "Low",
@@ -254,6 +277,8 @@ function showBarChart(dataset) {
 
     const xAxis = d3.axisBottom(x).tickSize([1]).tickPadding(10);
     const yAxis = d3.axisLeft(y);
+
+    yAxis.ticks(5);
 
     x.domain(dataset.map(d => {
         return d.name;

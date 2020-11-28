@@ -29,7 +29,7 @@ const drag = (simulation) => {
 		.on("end", dragended);
 };
 
-const scale = d3.scaleOrdinal(d3.schemeCategory10);
+const scale = d3.scaleOrdinal(d3.schemeCategory10.filter(colorValue => colorValue !== "#7f7f7f"));
 
 const colorCluster = (id) => {
 	return scale(id);
@@ -67,7 +67,6 @@ const showClusterIndepthGraph = (id) => {
 		}
 	});
 	prepareData(id, linksIndepth);
-
 
 	const simulationClusterInDepth = d3
 		.forceSimulation(nodesIndepth)
