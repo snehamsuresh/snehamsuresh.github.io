@@ -1,8 +1,8 @@
 function showSunBurst(clusterId, data) {
     d3.select('.sunburst-chart').remove()
 
-    const width = 350,
-        height = 350,
+    const width = 400,
+        height = 400,
         radius = width / 7
 
     const arc = d3.arc()
@@ -65,7 +65,7 @@ function showSunBurst(clusterId, data) {
         .attr("fill-opacity", d => +labelVisible(d.current))
         .attr("transform", d => labelTransform(d.current))
         .text(d => d.data.name)
-        .style("font-size", "7px");
+        .style("font-size", "8px");
 
     const cluster_number = svg.append("text")
         .attr("id", "title")
@@ -162,7 +162,7 @@ function showSunBurst(clusterId, data) {
                             <tr><td> Transition Prob: </td><td>` + nodeData.data.value + `</td> </tr>
                     </table>`
         } else {
-            let clusterInfo = nodeData.parent.data.name.split("-")[1]
+            let clusterInfo = nodeData.parent.data.name.split(":")[1]
             text = `<table>
                             <tr><td>Cluster: </td><td>` + clusterInfo + `</td></tr>
                             <tr><td>Source: </td><td>` + nodeData.data.name + `</td></tr>
@@ -236,7 +236,8 @@ function prepareData(clusterId, data) {
         "name": "High",
         "value": counts["High"]
     }];
-    showBarChart(indBarData);
+    //showBarChart(indBarData);
+    showEncodings(indBarData);
 }
 
 function showBarChart(dataset) {
@@ -365,4 +366,52 @@ function showBarChart(dataset) {
             return y(d.value) + .1;
         })
         .attr("dy", "-.5em");
+}
+
+function showEncodings(indBarData) {
+
+    d3.selectAll(".risk-image").remove();
+    d3.selectAll(".risk-text").remove();
+
+    d3.select(".risk-low")
+        .append("img")
+        .attr("class", "risk-image")
+        .attr("src", "assets/risk-low.svg")
+        .attr("alt", "low-risk-svg")
+        .attr("width", "70px")
+        .attr("height", "70px")
+        .exit()
+        .append("span")
+
+    d3.select(".risk-mod")
+        .append("img")
+        .attr("class", "risk-image")
+        .attr("src", "assets/risk-mod.svg")
+        .attr("alt", "low-risk-svg")
+        .attr("width", "70px")
+        .attr("height", "70px")
+
+    d3.select(".risk-high")
+        .append("img")
+        .attr("class", "risk-image")
+        .attr("src", "assets/risk-high.svg")
+        .attr("alt", "low-risk-svg")
+        .attr("width", "70px")
+        .attr("height", "70px")
+
+    d3.select(".risk-low")
+        .append("div")
+        .attr("class", "risk-text")
+        .text(indBarData.find(data => data.name === "Low").value)
+
+
+    d3.select(".risk-mod")
+        .append("div")
+        .attr("class", "risk-image")
+        .text(indBarData.find(data => data.name === "Moderate").value)
+
+    d3.select(".risk-high")
+        .append("div")
+        .attr("class", "risk-image")
+        .text(indBarData.find(data => data.name === "High").value)
 }

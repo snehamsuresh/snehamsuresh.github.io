@@ -151,10 +151,6 @@
     float: left;
 }
 
-.sunburst-graph {
-    float: left;
-}
-
 .bar-chart {
     position: absolute;
     margin-left: 300px;
@@ -164,7 +160,7 @@ div.tooltip {
     color: black;
     position: absolute;
     width: 170px;
-    height: 80px;
+    height: 60px;
     padding-left: 10px;
     padding-top: 5px;
     font: 12px sans-serif;
@@ -180,4 +176,43 @@ div.tooltip {
     padding: 10px;
     height: 800px;
     width: 500px;
+}
+
+.container {
+    display: flex;
+}
+
+.container>div {
+    flex: 1;
+}
+
+.sunBurst {
+    float: right;
+    margin-top: 25px;
+}
+
+.sunBurst>div {
+    margin-top: 5px;
+}
+
+.sunburst-graph {
+    float: left;
+}
+
+.risk-low>div {
+    font-size: 18px;
+    font-weight: 500;
+    color: #00D200;
+}
+
+.risk-mod>div {
+    font-size: 18px;
+    font-weight: 500;
+    color: #FFAA32;
+}
+
+.risk-high>div {
+    font-size: 18px;
+    font-weight: 500;
+    color: #E3005B;
 }
