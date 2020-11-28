@@ -387,7 +387,7 @@ function showEncodings(indBarData) {
         .append("img")
         .attr("class", "risk-image")
         .attr("src", "assets/risk-mod.svg")
-        .attr("alt", "low-risk-svg")
+        .attr("alt", "mod-risk-svg")
         .attr("width", "70px")
         .attr("height", "70px")
 
@@ -395,7 +395,7 @@ function showEncodings(indBarData) {
         .append("img")
         .attr("class", "risk-image")
         .attr("src", "assets/risk-high.svg")
-        .attr("alt", "low-risk-svg")
+        .attr("alt", "high-risk-svg")
         .attr("width", "70px")
         .attr("height", "70px")
 
