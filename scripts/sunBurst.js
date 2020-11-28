@@ -5,10 +5,6 @@ function showSunBurst(clusterId, data) {
         height = 350,
         radius = width / 7
 
-    valueScale = d3.scaleLinear()
-        .domain([0, 45])
-        .range([100, 1000])
-
     const arc = d3.arc()
         .startAngle(d => d.x0)
         .endAngle(d => d.x1)
@@ -19,7 +15,7 @@ function showSunBurst(clusterId, data) {
 
     const partition = data => {
         const root = d3.hierarchy(data)
-            .sum(d => valueScale(d.value))
+            .sum(d => (d.value))
             .sort((a, b) => b.value - a.value);
         return d3.partition()
             .size([2 * Math.PI, root.height + 1])
@@ -209,7 +205,7 @@ function showSunBurst(clusterId, data) {
 function prepareData(clusterId, data) {
     let indClusterData = {}
     indClusterData = {
-        "name": `Cluster-${clusterId}`,
+        "name": `Cluster:${clusterId}`,
         "children": []
     };
     data.forEach(clusterElement => {
