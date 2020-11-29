@@ -1,5 +1,5 @@
-const widthCluster = 500,
-	heightCluster = 500;
+const widthCluster = 400,
+	heightCluster = 400;
 
 let dataCluster;
 let dataClusterEdge;
@@ -29,7 +29,7 @@ const drag = (simulation) => {
 		.on("end", dragended);
 };
 
-const scale = d3.scaleOrdinal(d3.schemeCategory10);
+const scale = d3.scaleOrdinal(d3.schemeCategory10.filter(colorValue => colorValue !== "#7f7f7f"));
 
 const colorCluster = (id) => {
 	return scale(id);
@@ -41,13 +41,17 @@ const showClusterIndepthGraph = (id) => {
 
 	dataClusterEdge.nodes.forEach((data) => {
 		if (data.communityMembership.includes(id.toString())) {
-			nodesIndepth.push({ ...data });
+			nodesIndepth.push({
+				...data
+			});
 		}
 	});
 
 	dataClusterEdge.links.forEach((data) => {
 		if (data.community_membership.includes(id.toString())) {
-			linksIndepth.push({ ...data });
+			linksIndepth.push({
+				...data
+			});
 		}
 	});
 
@@ -57,18 +61,21 @@ const showClusterIndepthGraph = (id) => {
 				id: linkData.target,
 				communityMembership: linkData.community_membership,
 			};
-			nodesIndepth.push({ ...remainingNodeData });
+			nodesIndepth.push({
+				...remainingNodeData
+			});
 		}
 	});
+	prepareData(id, linksIndepth);
 
 	const simulationClusterInDepth = d3
 		.forceSimulation(nodesIndepth)
 		.force(
 			"link",
 			d3
-				.forceLink(linksIndepth)
-				.id((d) => d.id)
-				.distance(250)
+			.forceLink(linksIndepth)
+			.id((d) => d.id)
+			.distance(250)
 		)
 		.force("charge", d3.forceManyBody())
 		.force(
@@ -159,16 +166,15 @@ async function initClustersGraph() {
 
 	const linkExtent = d3.extent(dataCluster.links.map((data) => data.value));
 	const linkValue = d3.scaleOrdinal().domain(linkExtent).range([1, 10]);
-	console.log(linkExtent);
 
 	const simulationCluster = d3
 		.forceSimulation(dataCluster.nodes)
 		.force(
 			"link",
 			d3
-				.forceLink(dataCluster.links)
-				.id((d) => d.id)
-				.distance(200)
+			.forceLink(dataCluster.links)
+			.id((d) => d.id)
+			.distance(150)
 		)
 		.force("charge", d3.forceManyBody())
 		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2));
@@ -186,7 +192,8 @@ async function initClustersGraph() {
 	const svgCluster = d3
 		.select(".main-graph")
 		.append("svg")
-		.attr("viewBox", [0, 0, widthCluster, heightCluster]);
+		.attr("width", widthCluster)
+		.attr("height", heightCluster)
 
 	const linkCluster = svgCluster
 		.append("g")
@@ -204,7 +211,7 @@ async function initClustersGraph() {
 		.selectAll("circle")
 		.data(dataCluster.nodes)
 		.join("circle")
-		.attr("r", 35)
+		.attr("r", 20)
 		.attr("fill", (data) => colorCluster(data.id))
 		.call(drag(simulationCluster))
 		.on("click", (mouseEvent, data) => {

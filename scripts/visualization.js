@@ -4,7 +4,6 @@ $("#body-row .collapse").collapse("hide");
 // Collapse/Expand icon
 $("#collapse-icon").addClass("fa-angle-double-left");
 
-SidebarCollapse();
 $("[data-toggle=sidebar-colapse]").click(function () {
 	SidebarCollapse();
 });
@@ -26,17 +25,8 @@ function SidebarCollapse() {
 		SeparatorTitle.addClass("d-flex");
 	}
 
-	// Collapse/Expand icon
 	$("#collapse-icon").toggleClass("fa-angle-double-left fa-angle-double-right");
 }
-
-$("#inputGroupFile02").on("change", function () {
-	let fileName = $(this).val().split("\\").pop();
-	$(this).next(".custom-file-label").html(fileName);
-	$("#inputGroupFileAddon02").click(function () {
-		$(".toast").toast("show");
-	});
-});
 
 const range = document.getElementById("myRange");
 const rangeV = document.getElementById("rangeV");
@@ -51,7 +41,14 @@ const setValue = () => {
 document.addEventListener("DOMContentLoaded", setValue);
 range.addEventListener("input", setValue);
 
-//Upload Files to S3
+const min = range.min
+const max = range.max
+const value = range.value
+range.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${(value-min)/(max-min)*100}%, #DEE2E6 ${(value-min)/(max-min)*100}%, #DEE2E6 100%)`
+range.oninput = function () {
+	this.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${(this.value-this.min)/(this.max-this.min)*100}%, #DEE2E6 ${(this.value-this.min)/(this.max-this.min)*100}%, #DEE2E6 100%)`
+};
+
 function uploadFile() {
 	const inputFile = document.getElementById("inputGroupFile02").files[0];
 	if (inputFile == null) {
