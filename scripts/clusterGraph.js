@@ -29,28 +29,40 @@ const drag = (simulation) => {
 		.on("end", dragended);
 };
 
-const scale = d3.scaleOrdinal(d3.schemeCategory10.filter(colorValue => colorValue !== "#7f7f7f"));
+const scale = d3.scaleOrdinal(
+	d3.schemeCategory10.filter((colorValue) => colorValue !== "#7f7f7f")
+);
 
 const colorCluster = (id) => {
 	return scale(id);
 };
 
 const showClusterIndepthGraph = (id) => {
+	const latencyRange = parseInt(document.getElementById("myRange").value);
+
 	const nodesIndepth = [];
 	const linksIndepth = [];
 
 	dataClusterEdge.nodes.forEach((data) => {
-		if (data.communityMembership.includes(id.toString())) {
+		if (
+			data.communityMembership.includes(id.toString()) &&
+			data.latencies <= parseInt(latencyRange)
+		) {
 			nodesIndepth.push({
-				...data
+				...data,
+				source: true,
 			});
 		}
 	});
 
 	dataClusterEdge.links.forEach((data) => {
-		if (data.community_membership.includes(id.toString())) {
+		const latencyMax = data.latencies[data.latencies.length - 1];
+		if (
+			data.community_membership.includes(id.toString()) &&
+			latencyMax <= latencyRange
+		) {
 			linksIndepth.push({
-				...data
+				...data,
 			});
 		}
 	});
@@ -60,12 +72,14 @@ const showClusterIndepthGraph = (id) => {
 			const remainingNodeData = {
 				id: linkData.target,
 				communityMembership: linkData.community_membership,
+				source: false,
 			};
 			nodesIndepth.push({
-				...remainingNodeData
+				...remainingNodeData,
 			});
 		}
 	});
+
 	prepareData(id, linksIndepth);
 
 	const simulationClusterInDepth = d3
@@ -73,9 +87,9 @@ const showClusterIndepthGraph = (id) => {
 		.force(
 			"link",
 			d3
-			.forceLink(linksIndepth)
-			.id((d) => d.id)
-			.distance(250)
+				.forceLink(linksIndepth)
+				.id((d) => d.id)
+				.distance(150)
 		)
 		.force("charge", d3.forceManyBody())
 		.force(
@@ -106,7 +120,7 @@ const showClusterIndepthGraph = (id) => {
 		.selectAll("circle")
 		.data(nodesIndepth)
 		.join("circle")
-		.attr("r", 10)
+		.attr("r", (d) => (d.source ? 10 : 5))
 		.attr("fill", colorCluster(id))
 		.call(drag(simulationClusterInDepth));
 
@@ -125,42 +139,6 @@ async function initClustersGraph() {
 	dataCluster = await d3.json("../data/cluster_membership.json");
 	dataClusterEdge = await d3.json("../data/edges_data.json");
 
-	// dataClusterEdge.links.forEach((data) => {
-	// 	data.community_membership = data.community_membership
-	// 		.replace('"', "")
-	// 		.replace("[", "")
-	// 		.replace("]", "")
-	// 		.split(", ");
-	// });
-	// const nodes = [];
-
-	// dataClusterEdge.edge_table.forEach((data) => {
-	// 	let source,
-	// 		target = false;
-	// 	if (data.source === data.target) {
-	// 		if (!nodes.some((nodeData) => nodeData.id === data.source)) {
-	// 			nodes.push({ id: data.source });
-	// 		}
-	// 	} else {
-	// 		if (!nodes.some((nodeData) => nodeData.id === data.source)) source = true;
-	// 		else if (!nodes.some((nodeData) => nodeData.id === data.target))
-	// 			target = true;
-	// 	}
-	// 	if (source) nodes.push({ id: data.source });
-	// 	if (target) nodes.push({ id: data.target });
-	// });
-
-	// nodes.forEach((data) => {
-	// 	const edgeObj = dataClusterEdge.edge_table.filter(
-	// 		(edgeData) => edgeData.source === data.id
-	// 	);
-	// 	if (edgeObj !== null)
-	// 		data.communityMembership = edgeObj[0].community_membership;
-	// 	else data.communityMembership = [];
-	// });
-	// console.log(dataClusterEdge);
-	// console.log(nodes);
-
 	const backBtn = document.getElementById("clusterBackBtn");
 	const clusterGraphMain = document.getElementById("clusterMainGraph");
 
@@ -172,9 +150,9 @@ async function initClustersGraph() {
 		.force(
 			"link",
 			d3
-			.forceLink(dataCluster.links)
-			.id((d) => d.id)
-			.distance(150)
+				.forceLink(dataCluster.links)
+				.id((d) => d.id)
+				.distance(150)
 		)
 		.force("charge", d3.forceManyBody())
 		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2));
@@ -193,7 +171,7 @@ async function initClustersGraph() {
 		.select(".main-graph")
 		.append("svg")
 		.attr("width", widthCluster)
-		.attr("height", heightCluster)
+		.attr("height", heightCluster);
 
 	const linkCluster = svgCluster
 		.append("g")
