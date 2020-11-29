@@ -1,5 +1,7 @@
 function showSunBurst(clusterId, data) {
     d3.select('.sunburst-chart').remove()
+    d3.select('.cluster-text')
+        .text(`Procedures:  Cluster-${clusterId}`)
 
     const width = 400,
         height = 400,
@@ -67,13 +69,13 @@ function showSunBurst(clusterId, data) {
         .text(d => d.data.name)
         .style("font-size", "8px");
 
-    const cluster_number = svg.append("text")
-        .attr("id", "title")
-        .attr("x", (width / 2))
-        .attr("y", (width / 2))
-        .attr("text-anchor", "middle")
-        .style("font-size", "0.8em")
-        .text(data.name)
+    // const cluster_number = svg.append("text")
+    //     .attr("id", "title")
+    //     .attr("x", (width / 2))
+    //     .attr("y", (width / 2))
+    //     .attr("text-anchor", "middle")
+    //     .style("font-size", "0.8em")
+    //     .text(data.name)
 
     const parent = g.append("circle")
         .datum(root)
@@ -102,7 +104,7 @@ function showSunBurst(clusterId, data) {
             .data(p)
             .attr("id", "title")
             .attr("x", (width / 2))
-            .attr("y", (width / 2 + 20))
+            .attr("y", (width / 2))
             .attr("text-anchor", "middle")
             .style("font-size", "0.5em")
             .attr('id', "center-text")
@@ -369,6 +371,9 @@ function showBarChart(dataset) {
 }
 
 function showEncodings(indBarData) {
+
+    d3.select('.text-risk')
+        .text("Associated Risk")
 
     d3.selectAll(".risk-image").remove();
     d3.selectAll(".risk-text").remove();

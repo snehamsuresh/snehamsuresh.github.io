@@ -4,9 +4,12 @@
 }
 
 #sidebar-container {
-    min-height: 100vh;
     background-color: #333;
     padding: 0;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 .sidebar-expanded {
@@ -17,7 +20,6 @@
     width: 60px;
 }
 
-/* Menu item*/
 #sidebar-container .list-group a {
     height: 50px;
     color: white;
@@ -151,11 +153,6 @@
     float: left;
 }
 
-.bar-chart {
-    position: absolute;
-    margin-left: 300px;
-}
-
 div.tooltip {
     color: black;
     position: absolute;
@@ -171,48 +168,8 @@ div.tooltip {
     pointer-events: none;
 }
 
-
 .patient-graph {
     padding: 10px;
     height: 800px;
     width: 500px;
-}
-
-.container {
-    display: flex;
-}
-
-.container>div {
-    flex: 1;
-}
-
-.sunBurst {
-    float: right;
-    margin-top: 25px;
-}
-
-.sunBurst>div {
-    margin-top: 5px;
-}
-
-.sunburst-graph {
-    float: left;
-}
-
-.risk-low>div {
-    font-size: 18px;
-    font-weight: 500;
-    color: #00D200;
-}
-
-.risk-mod>div {
-    font-size: 18px;
-    font-weight: 500;
-    color: #FFAA32;
-}
-
-.risk-high>div {
-    font-size: 18px;
-    font-weight: 500;
-    color: #E3005B;
 }

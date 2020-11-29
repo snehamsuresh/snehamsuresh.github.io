@@ -25,17 +25,8 @@ function SidebarCollapse() {
 		SeparatorTitle.addClass("d-flex");
 	}
 
-	// Collapse/Expand icon
 	$("#collapse-icon").toggleClass("fa-angle-double-left fa-angle-double-right");
 }
-
-$("#inputGroupFile02").on("change", function () {
-	let fileName = $(this).val().split("\\").pop();
-	$(this).next(".custom-file-label").html(fileName);
-	$("#inputGroupFileAddon02").click(function () {
-		$(".toast").toast("show");
-	});
-});
 
 const range = document.getElementById("myRange");
 const rangeV = document.getElementById("rangeV");
@@ -58,7 +49,6 @@ range.oninput = function () {
 	this.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${(this.value-this.min)/(this.max-this.min)*100}%, #DEE2E6 ${(this.value-this.min)/(this.max-this.min)*100}%, #DEE2E6 100%)`
 };
 
-//Upload Files to S3
 function uploadFile() {
 	const inputFile = document.getElementById("inputGroupFile02").files[0];
 	if (inputFile == null) {
