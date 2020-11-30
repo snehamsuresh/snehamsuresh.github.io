@@ -1,5 +1,10 @@
 function showPatientGraph(data) {
 
+
+  d3.select(".patient-svg").remove();
+  d3.select('.patient-text')
+    .text(`Patient ID: ${data.name}`)
+
   const width = 300
 
   margin = ({
@@ -23,10 +28,6 @@ function showPatientGraph(data) {
     d._children = d.children;
     if (d.depth && d.data.name.length !== 7) d.children = null;
   });
-
-  d3.select(".patient-svg").remove();
-  d3.select('.patient-text')
-  .text(`Individual patient graph`)
 
   const svg = d3.select(".patient-graph").append("svg")
     .attr("viewBox", [-margin.left, -margin.top, width, dx])
@@ -87,7 +88,7 @@ function showPatientGraph(data) {
       .attr("fill", d => d._children ? "#698a73" : "#bae8c9")
       .attr("stroke-width", 10);
 
-      nodeEnter.append("text")
+    nodeEnter.append("text")
       .style("font", "5.75px sans-serif")
       .attr("text-anchor", 'middle')
       .text(d => d.data.name)
@@ -113,7 +114,7 @@ function showPatientGraph(data) {
       .attr("stroke-linejoin", "round")
       .attr("stroke-width", 3)
       .attr("stroke", "white");
-      
+
 
     // Transition nodes to their new position.
     const nodeUpdate = node.merge(nodeEnter).transition(transition)
