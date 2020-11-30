@@ -121,14 +121,15 @@ const showClusterIndepthGraph = (id) => {
 
 	const nodeClusterInDepth = svgClusterInDepth
 		.append("g")
-		.attr("stroke", "#fff")
-		.attr("stroke-width", 1.5)
 		.selectAll("circle")
 		.data(nodesIndepth)
 		.join("circle")
+		.attr("stroke", "#fff")
+		.attr("stroke-width", (d) => (d.source ? 3 : 1))
 		.attr("r", (d) => (d.source ? 10 : 5))
 		.attr("fill", colorCluster(id))
 		.on("click", (event, d) => {
+			console.log(id);
 			if (d.source) toggleDisplay({ ...d, communityID: id });
 		})
 		.call(drag(simulationClusterInDepth));
