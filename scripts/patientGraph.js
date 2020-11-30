@@ -217,8 +217,14 @@ Promise.all([d3.json("../data/patientDetails.json")])
     selectElement = document.getElementById("dropdownMenu")
     selectElement.onchange = function () {
       output = selectElement.value;
-      let selectedPatient = patientData.find(x => x.name === output)
-      showPatientGraph(selectedPatient);
+      if (output === 'Select a Patient') {
+        d3.select(".patient-svg").remove();
+        d3.select('.patient-text')
+          .text(`Select a Patient`);
+      } else {
+        let selectedPatient = patientData.find(x => x.name === output)
+        showPatientGraph(selectedPatient);
+      }
     }
 
   });
