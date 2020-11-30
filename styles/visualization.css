@@ -4,9 +4,12 @@
 }
 
 #sidebar-container {
-    min-height: 100vh;
     background-color: #333;
     padding: 0;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 .sidebar-expanded {
@@ -17,23 +20,11 @@
     width: 60px;
 }
 
-/* Menu item*/
 #sidebar-container .list-group a {
     height: 50px;
     color: white;
 }
 
-/* Submenu item
-#sidebar-container .list-group .sidebar-submenu a {
-    height: 45px;
-    padding-left: 30px;
-} */
-
-/* .sidebar-submenu {
-    font-size: 0.9rem;
-} */
-
-/* Separators */
 .sidebar-separator-title {
     background-color: #333;
     height: 35px;
@@ -44,12 +35,6 @@
     height: 25px;
 }
 
-/* .logo-separator {
-    background-color: #333;
-    height: 60px;
-} */
-
-/* Closed submenu icon */
 #sidebar-container .list-group .list-group-item[aria-expanded="false"] .submenu-icon::after {
     content: " \f0d7";
     font-family: FontAwesome;
@@ -58,7 +43,7 @@
     padding-left: 10px;
 }
 
-/* Opened submenu icon */
+
 #sidebar-container .list-group .list-group-item[aria-expanded="true"] .submenu-icon::after {
     content: " \f0da";
     font-family: FontAwesome;
@@ -97,7 +82,7 @@
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: var(--primary);
+    background: var(--secondary);
     cursor: pointer;
 }
 
@@ -168,20 +153,11 @@
     float: left;
 }
 
-.sunburst-graph {
-    float: left;
-}
-
-.bar-chart {
-    position: absolute;
-    margin-left: 400px;
-}
-
 div.tooltip {
     color: black;
     position: absolute;
     width: 170px;
-    height: 80px;
+    height: 60px;
     padding-left: 10px;
     padding-top: 5px;
     font: 12px sans-serif;
@@ -192,9 +168,15 @@ div.tooltip {
     pointer-events: none;
 }
 
-
 .patient-graph {
     padding: 10px;
     height: 800px;
     width: 500px;
+}
+
+.patient-text {
+    padding-top: 20px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 500;
 }
