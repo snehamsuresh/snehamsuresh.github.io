@@ -135,6 +135,8 @@ const showClusterIndepthGraph = (id) => {
 				communityID: id
 			});
 		})
+		.on("mouseover", inDepthNodeHovered)
+		.on("mouseout", inDepthNodeHoveredOut)
 		.call(drag(simulationClusterInDepth));
 
 	simulationClusterInDepth.on("tick", () => {
@@ -147,6 +149,47 @@ const showClusterIndepthGraph = (id) => {
 		nodeClusterInDepth.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
 	});
 };
+
+function inDepthNodeHovered(d, i) {
+	if (i.source) {
+		let numofTargets = linksIndepth.filter(sources => sources.source.id == i.id).length
+		toolTip.transition().duration(200)
+			.style('opacity', 0.9);
+		toolTip.html(generateData(i, numofTargets, true))
+			.style('left', d.pageX + 'px')
+			.style('top', d.pageY + 'px');
+	} else {
+		let sourceOfTarget = linksIndepth.find(sources => sources.target.id == i.id).source.id
+		toolTip.transition().duration(200)
+			.style('opacity', 0.9);
+		toolTip.html(generateData(i, sourceOfTarget, false))
+			.style('left', d.pageX + 'px')
+			.style('top', d.pageY + 'px');
+	}
+}
+
+function inDepthNodeHoveredOut(d, i) {
+	toolTip.transition()
+		.duration(500)
+		.style('opacity', 0);
+}
+
+function generateData(i, variable, isSource) {
+	let text;
+	if (isSource) {
+		text = `<table>
+                            <tr><td>Source: </td><td>` + i.id + `</td></tr>
+                            <tr><td>No of Targets: </td><td>` + variable + `</td></tr>
+					</table>`
+		return text
+	} else {
+		text = `<table>
+                            <tr><td>Source: </td><td>` + variable + `</td></tr>
+                            <tr><td>Target: </td><td>` + i.id + `</td></tr>
+					</table>`
+		return text
+	}
+}
 
 const showClusterSourceGraph = (data) => {
 	console.log(data);
@@ -336,7 +379,7 @@ async function initClustersGraph() {
 		.call(drag(simulationCluster))
 		.on("click", (mouseEvent, data) => {
 			toggleDisplay(data);
-		});
+		})
 
 	const textCluster = d3.selectAll(".g-circle")
 		.data(dataCluster.nodes)
