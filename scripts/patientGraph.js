@@ -25,6 +25,8 @@ function showPatientGraph(data) {
   });
 
   d3.select(".patient-svg").remove();
+  d3.select('.patient-text')
+  .text(`Individual patient graph`)
 
   const svg = d3.select(".patient-graph").append("svg")
     .attr("viewBox", [-margin.left, -margin.top, width, dx])
@@ -82,19 +84,36 @@ function showPatientGraph(data) {
 
     nodeEnter.append("circle")
       .attr("r", 18)
-      .attr("fill", d => d._children ? "#555" : "#999")
+      .attr("fill", d => d._children ? "#698a73" : "#bae8c9")
       .attr("stroke-width", 10);
 
-    nodeEnter.append("text")
+      nodeEnter.append("text")
       .style("font", "5.75px sans-serif")
-      .style('fill', 'white')
-      .attr("dy", "0.31em")
       .attr("text-anchor", 'middle')
       .text(d => d.data.name)
+      .attr("dy", (d) => {
+        if (d.depth == 0) {
+          return "4.5em"
+        }
+        return "0.31em"
+      })
+      .attr("dx", (d) => {
+        if (d.depth == 0) {
+          return "1em"
+        }
+        return "0em"
+      })
+      .style('fill', (d) => {
+        if (d.depth == 0) {
+          return "black"
+        }
+        return "black"
+      })
       .clone(true).lower()
       .attr("stroke-linejoin", "round")
       .attr("stroke-width", 3)
       .attr("stroke", "white");
+      
 
     // Transition nodes to their new position.
     const nodeUpdate = node.merge(nodeEnter).transition(transition)
@@ -114,6 +133,16 @@ function showPatientGraph(data) {
 
     // Enter any new links at the parent's previous position.
     const linkEnter = link.enter().append("path")
+      .attr("stroke", (d => {
+        switch (d.target.data.value) {
+          case "Low":
+            return "#00D200"
+          case "Moderate":
+            return "#FFAA32"
+          case "High":
+            return "#E3005B"
+        }
+      }))
       .attr("d", d => {
         const o = {
           x: source.x0,
@@ -153,7 +182,7 @@ function showPatientGraph(data) {
 }
 
 
-Promise.all([d3.json("../data/patients.json")])
+Promise.all([d3.json("../data/patientDetails.json")])
   .then(([patientData]) => {
 
     //get the keys
