@@ -110,6 +110,22 @@ const showClusterIndepthGraph = (id) => {
 		.attr("width", widthCluster + 100)
 		.attr("height", heightCluster + 100);
 
+	svgClusterInDepth.append('defs').append('marker')
+		.attrs({
+			'id': 'ClusterIndepth',
+			'viewBox': '-0 -5 10 12',
+			'refX': 15,
+			'refY': 0,
+			'orient': 'auto',
+			'markerWidth': 10,
+			'markerHeight': 10,
+			'xoverflow': 'visible'
+		})
+		.append('svg:path')
+		.attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+		.attr('fill', '#999')
+		.style('stroke', 'none');
+
 	const linkClusterInDepth = svgClusterInDepth
 		.append("g")
 		.attr("stroke", "#666")
@@ -117,7 +133,8 @@ const showClusterIndepthGraph = (id) => {
 		.selectAll("line")
 		.data(linksIndepth)
 		.join("line")
-		.attr("stroke-width", (d) => 1);
+		.attr("stroke-width", (d) => 1)
+		.attr('marker-end', 'url(#ClusterIndepth)');
 
 	const nodeClusterInDepth = svgClusterInDepth
 		.append("g")
@@ -125,7 +142,7 @@ const showClusterIndepthGraph = (id) => {
 		.data(nodesIndepth)
 		.join("circle")
 		.attr("stroke", "#fff")
-		.attr("stroke-width", (d) => (d.source ? 3 : 1))
+		// .attr("stroke-width", (d) => (d.source ? 3 : 1))
 		.attr("r", (d) => (d.source ? 10 : 5))
 		.attr("fill", colorCluster(id))
 		.on("click", (event, d) => {
@@ -260,6 +277,22 @@ const showClusterSourceGraph = (data) => {
 		.attr("width", widthCluster + 100)
 		.attr("height", heightCluster + 100);
 
+	svgClusterSTDepth.append('defs').append('marker')
+		.attrs({
+			'id': 'stDepth',
+			'viewBox': '-0 -5 10 12',
+			'refX': 15,
+			'refY': 0,
+			'orient': 'auto',
+			'markerWidth': 10,
+			'markerHeight': 10,
+			'xoverflow': 'visible'
+		})
+		.append('svg:path')
+		.attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+		.attr('fill', '#999')
+		.style('stroke', 'none');
+
 	const linkClusterSTDepth = svgClusterSTDepth
 		.append("g")
 		.attr("stroke", "#666")
@@ -267,12 +300,13 @@ const showClusterSourceGraph = (data) => {
 		.selectAll("line")
 		.data(stLinksList)
 		.join("line")
-		.attr("stroke-width", (d) => 1);
+		.attr("stroke-width", (d) => 1)
+		.attr('marker-end', 'url(#stDepth)');
 
 	const nodeClusterSTDepth = svgClusterSTDepth
 		.append("g")
 		.attr("stroke", "#fff")
-		.attr("stroke-width", 1.5)
+		// .attr("stroke-width", 1.5)
 		.selectAll("circle")
 		.data(stNodeList)
 		.join("circle")
