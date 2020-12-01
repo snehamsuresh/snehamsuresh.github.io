@@ -77,6 +77,7 @@ const showClusterIndepthGraph = (id) => {
 				id: linkData.target,
 				communityMembership: linkData.community_membership,
 				source: false,
+				depth: 1
 			};
 			nodesIndepth.push({
 				...remainingNodeData,
@@ -168,6 +169,7 @@ const showClusterIndepthGraph = (id) => {
 };
 
 function inDepthNodeHovered(d, i) {
+	if (i.depth === 1) return;
 	if (i.source) {
 		let numofTargets = linksIndepth.filter(sources => sources.source.id == i.id).length
 		toolTip.transition().duration(200)
@@ -176,10 +178,9 @@ function inDepthNodeHovered(d, i) {
 			.style('left', d.pageX + 'px')
 			.style('top', d.pageY + 'px');
 	} else {
-		let sourceOfTarget = linksIndepth.find(sources => sources.target.id == i.id).source.id
 		toolTip.transition().duration(200)
 			.style('opacity', 0.9);
-		toolTip.html(generateData(i, sourceOfTarget, false))
+		toolTip.html(generateData(i, i.sourceName, false))
 			.style('left', d.pageX + 'px')
 			.style('top', d.pageY + 'px');
 	}
@@ -242,7 +243,10 @@ const showClusterSourceGraph = (data) => {
 			const remainingNodeData = {
 				id: linkData.target,
 				communityID: data.communityID,
+				sourceName: data.id,
 				source: false,
+				depth: 2
+
 			};
 			stNodeList.push({
 				...remainingNodeData,
@@ -312,6 +316,8 @@ const showClusterSourceGraph = (data) => {
 		.join("circle")
 		.attr("r", (d) => (d.source ? 10 : 5))
 		.attr("fill", (d) => colorCluster(d.communityID))
+		.on("mouseover", inDepthNodeHovered)
+		.on("mouseout", inDepthNodeHoveredOut)
 		.call(drag(simulationClusterSTDepth));
 
 	simulationClusterSTDepth.on("tick", () => {
