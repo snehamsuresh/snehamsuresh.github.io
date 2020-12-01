@@ -127,7 +127,11 @@ const showClusterIndepthGraph = (id) => {
 		.attr("fill", colorCluster(id))
 		.on("click", (event, d) => {
 			console.log(id);
-			if (d.source) toggleDisplay({ ...d, communityID: id });
+			if (d.source)
+				toggleDisplay({
+					...d,
+					communityID: id,
+				});
 		})
 		.call(drag(simulationClusterInDepth));
 
@@ -319,16 +323,24 @@ async function initClustersGraph() {
 		.append("g")
 		.attr("stroke", "#fff")
 		.attr("stroke-width", 1.5)
-		.selectAll("circle")
+		.selectAll("g")
 		.data(dataCluster.nodes)
-		.join("circle")
+		.enter()
+		.append("g")
+		.attr("class", "g-circle")
+		.append("circle")
 		.attr("r", 20)
 		.attr("fill", (data) => colorCluster(data.id))
 		.call(drag(simulationCluster))
 		.on("click", (mouseEvent, data) => {
-			//console.log(d, x);
 			toggleDisplay(data);
 		});
+
+	const textCluster = d3
+		.selectAll(".g-circle")
+		.data(dataCluster.nodes)
+		.append("text")
+		.text((d) => d.id);
 
 	simulationCluster.on("tick", () => {
 		linkCluster
@@ -338,6 +350,7 @@ async function initClustersGraph() {
 			.attr("y2", (d) => d.target.y + 1);
 
 		nodeCluster.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+		textCluster.attr("x", (d) => d.x - 5).attr("y", (d) => d.y + 5);
 	});
 }
 
