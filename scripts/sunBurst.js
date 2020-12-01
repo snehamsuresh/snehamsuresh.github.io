@@ -67,15 +67,9 @@ function showSunBurst(clusterId, data) {
         .attr("fill-opacity", d => +labelVisible(d.current))
         .attr("transform", d => labelTransform(d.current))
         .text(d => d.data.name)
-        .style("font-size", "8px");
-
-    // const cluster_number = svg.append("text")
-    //     .attr("id", "title")
-    //     .attr("x", (width / 2))
-    //     .attr("y", (width / 2))
-    //     .attr("text-anchor", "middle")
-    //     .style("font-size", "0.8em")
-    //     .text(data.name)
+        .style("font-size", "8px")
+        .style("fill", "white")
+        .style("opacity", 0.8)
 
     const parent = g.append("circle")
         .datum(root)
@@ -113,7 +107,9 @@ function showSunBurst(clusterId, data) {
                 if (Number.isInteger(d.data.name)) {
                     return "Source : " + d.data.name;
                 }
-            });
+            })
+            .style("fill", "white")
+            .style("opacity", 0.8);
 
         path.transition(t)
             .tween("data", d => {
@@ -238,142 +234,13 @@ function prepareData(clusterId, data) {
         "name": "High",
         "value": counts["High"]
     }];
-    //showBarChart(indBarData);
     showEncodings(indBarData);
-}
-
-function showBarChart(dataset) {
-    d3.select('.bar-graph').remove()
-    const margin = {
-            top: 40,
-            right: 30,
-            bottom: 30,
-            left: 50
-        },
-        width = 200 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
-
-    const greyColor = "#898989";
-    const barColor = d3.interpolateReds(0.4);
-    const highlightColor = d3.interpolateReds(0.3);
-
-    const svg = d3.select(".bar-chart")
-        .append("div")
-        .attr("class", "bar-graph")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .attr("class", "bar-svg-graph")
-
-    const x = d3.scaleBand()
-        .range([0, width])
-        .padding(0.2);
-
-    const y = d3.scaleLinear()
-        .range([height, 0]);
-
-    const xAxis = d3.axisBottom(x).tickSize([1]).tickPadding(10);
-    const yAxis = d3.axisLeft(y);
-
-    yAxis.ticks(5);
-
-    x.domain(dataset.map(d => {
-        return d.name;
-    }));
-    y.domain([0, d3.max(dataset, d => {
-        return d.value;
-    })]);
-
-    svg.append("g")
-        .attr("class", "x-axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
-    svg.append("g")
-        .attr("class", "y-axis")
-        .call(yAxis);
-
-    svg.selectAll(".bar")
-        .data(dataset)
-        .enter()
-        .append("rect")
-        .attr("class", "bar")
-        .style("display", d => {
-            return d.value === null ? "none" : null;
-        })
-        .style("fill", d => {
-            return d.value === d3.max(dataset, d => {
-                    return d.value;
-                }) ?
-                highlightColor : barColor
-        })
-        .on("mouseover", function (event, data) {
-            d3.select(this).transition().duration(200).style('opacity', 0.5)
-        })
-        .on("mouseout", function (event, data) {
-            d3.select(this).transition().duration(200).style('opacity', 1)
-        })
-        .attr("x", d => {
-            return x(d.name);
-        })
-        .attr("width", x.bandwidth())
-        .attr("y", d => {
-            return height;
-        })
-        .attr("height", 0)
-        .transition()
-        .duration(750)
-        .delay(function (d, i) {
-            return i * 200;
-        })
-        .attr("y", d => {
-            return y(d.value);
-        })
-        .attr("height", d => {
-            return height - y(d.value);
-        })
-
-    svg.selectAll(".label")
-        .data(dataset)
-        .enter()
-        .append("text")
-        .attr("class", "label")
-        .style("display", d => {
-            return d.value === null ? "none" : null;
-        })
-        .attr("x", (d => {
-            return x(d.name) + (x.bandwidth() / 2) - 8;
-        }))
-        .style("fill", d => {
-            return d.value === d3.max(dataset, d => {
-                    return d.value;
-                }) ?
-                highlightColor : greyColor
-        })
-        .attr("y", d => {
-            return height;
-        })
-        .attr("height", 0)
-        .transition()
-        .duration(750)
-        .delay((d, i) => {
-            return i * 200;
-        })
-        .text(d => {
-            return (d.value);
-        })
-        .attr("y", d => {
-            return y(d.value) + .1;
-        })
-        .attr("dy", "-.5em");
 }
 
 function showEncodings(indBarData) {
 
     d3.select('.text-risk')
-        .text("Associated Risk")
+        .html(`<p>Associated <br/><span>Risk</span></p>`)
 
     d3.selectAll(".risk-image").remove();
     d3.selectAll(".risk-text").remove();
@@ -383,8 +250,8 @@ function showEncodings(indBarData) {
         .attr("class", "risk-image")
         .attr("src", "assets/risk-low.svg")
         .attr("alt", "low-risk-svg")
-        .attr("width", "70px")
-        .attr("height", "70px")
+        .attr("width", "60px")
+        .attr("height", "60px")
         .exit()
         .append("span")
 
@@ -393,30 +260,30 @@ function showEncodings(indBarData) {
         .attr("class", "risk-image")
         .attr("src", "assets/risk-mod.svg")
         .attr("alt", "mod-risk-svg")
-        .attr("width", "70px")
-        .attr("height", "70px")
+        .attr("width", "60px")
+        .attr("height", "60px")
 
     d3.select(".risk-high")
         .append("img")
         .attr("class", "risk-image")
         .attr("src", "assets/risk-high.svg")
         .attr("alt", "high-risk-svg")
-        .attr("width", "70px")
-        .attr("height", "70px")
+        .attr("width", "60px")
+        .attr("height", "60px")
 
     d3.select(".risk-low")
         .append("div")
         .attr("class", "risk-text")
-        .text(indBarData.find(data => data.name === "Low").value)
+        .text(indBarData.find(data => data.name === "Low").value === undefined ? 0 : indBarData.find(data => data.name === "Low").value)
 
 
     d3.select(".risk-mod")
         .append("div")
         .attr("class", "risk-image")
-        .text(indBarData.find(data => data.name === "Moderate").value)
+        .text(indBarData.find(data => data.name === "Moderate").value === undefined ? 0 : indBarData.find(data => data.name === "Moderate").value)
 
     d3.select(".risk-high")
         .append("div")
         .attr("class", "risk-image")
-        .text(indBarData.find(data => data.name === "High").value)
+        .text(indBarData.find(data => data.name === "High").value === undefined ? 0 : indBarData.find(data => data.name === "High").value)
 }
