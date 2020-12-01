@@ -1,6 +1,7 @@
 html,
 body {
 	height: 100%;
+	background-color: #343a40;
 }
 
 #body-row {
@@ -196,16 +197,32 @@ div.tooltip {
 
 .cluster-item {
 	grid-area: cluster;
+	background-color: #6c757d;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.cluster-background {
+	margin: 100;
+	border-width: 5px;
+	border-color: red;
+	background-color: #6c757d;
 }
 
 .patient-item {
 	grid-area: patient;
 	position: relative;
+	background-color: #6c757d;
 	width: 100%;
 	height: 130vh;
 	overflow-y: scroll;
+	margin: 10px;
+	border-radius: 10px;
 }
 
 .sunburst-item {
 	grid-area: sunburst;
+	background-color: #6c757d;
+	margin: 10px;
+	border-radius: 10px;
 }

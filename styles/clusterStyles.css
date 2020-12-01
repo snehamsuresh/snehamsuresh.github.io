@@ -1,3 +1,9 @@
 .cluster_btn--back {
 	margin-top: 20px;
 }
+
+.btn-custom {
+	color: #ffffff;
+	background-color: #343a40;
+	margin-left: 10px;
+}
