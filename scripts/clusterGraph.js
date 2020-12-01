@@ -1,4 +1,4 @@
-const widthCluster = 400,
+const widthCluster = 500,
 	heightCluster = 400;
 
 let dataCluster;
@@ -93,13 +93,10 @@ const showClusterIndepthGraph = (id) => {
 			d3
 				.forceLink(linksIndepth)
 				.id((d) => d.id)
-				.distance(150)
+				.distance(120)
 		)
 		.force("charge", d3.forceManyBody())
-		.force(
-			"center",
-			d3.forceCenter(widthCluster / 2 + 30, heightCluster / 2 + 70)
-		)
+		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2 + 20))
 		.force("forceX", d3.forceX().strength(0.1));
 
 	const svgClusterInDepth = d3
@@ -107,8 +104,8 @@ const showClusterIndepthGraph = (id) => {
 		.append("svg")
 		.attr("id", "svgClusterInDepth")
 		//.attr("viewBox", [0, 0, widthCluster + 100, heightCluster + 100]);
-		.attr("width", widthCluster + 100)
-		.attr("height", heightCluster + 100);
+		.attr("width", widthCluster)
+		.attr("height", heightCluster);
 
 	const linkClusterInDepth = svgClusterInDepth
 		.append("g")
