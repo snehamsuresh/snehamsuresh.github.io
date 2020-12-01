@@ -1,471 +1,441 @@
-const data = {
-	nodes: [
-		{ id: "Myriel", group: 1 },
-		{ id: "Napoleon", group: 1 },
-		{ id: "Mlle.Baptistine", group: 1 },
-		{ id: "Mme.Magloire", group: 1 },
-		{ id: "CountessdeLo", group: 1 },
-		{ id: "Geborand", group: 1 },
-		{ id: "Champtercier", group: 1 },
-		{ id: "Cravatte", group: 1 },
-		{ id: "Count", group: 1 },
-		{ id: "OldMan", group: 1 },
-		{ id: "Labarre", group: 2 },
-		{ id: "Valjean", group: 2 },
-		{ id: "Marguerite", group: 3 },
-		{ id: "Mme.deR", group: 2 },
-		{ id: "Isabeau", group: 2 },
-		{ id: "Gervais", group: 2 },
-		{ id: "Tholomyes", group: 3 },
-		{ id: "Listolier", group: 3 },
-		{ id: "Fameuil", group: 3 },
-		{ id: "Blacheville", group: 3 },
-		{ id: "Favourite", group: 3 },
-		{ id: "Dahlia", group: 3 },
-		{ id: "Zephine", group: 3 },
-		{ id: "Fantine", group: 3 },
-		{ id: "Mme.Thenardier", group: 4 },
-		{ id: "Thenardier", group: 4 },
-		{ id: "Cosette", group: 5 },
-		{ id: "Javert", group: 4 },
-		{ id: "Fauchelevent", group: 0 },
-		{ id: "Bamatabois", group: 2 },
-		{ id: "Perpetue", group: 3 },
-		{ id: "Simplice", group: 2 },
-		{ id: "Scaufflaire", group: 2 },
-		{ id: "Woman1", group: 2 },
-		{ id: "Judge", group: 2 },
-		{ id: "Champmathieu", group: 2 },
-		{ id: "Brevet", group: 2 },
-		{ id: "Chenildieu", group: 2 },
-		{ id: "Cochepaille", group: 2 },
-		{ id: "Pontmercy", group: 4 },
-		{ id: "Boulatruelle", group: 6 },
-		{ id: "Eponine", group: 4 },
-		{ id: "Anzelma", group: 4 },
-		{ id: "Woman2", group: 5 },
-		{ id: "MotherInnocent", group: 0 },
-		{ id: "Gribier", group: 0 },
-		{ id: "Jondrette", group: 7 },
-		{ id: "Mme.Burgon", group: 7 },
-		{ id: "Gavroche", group: 8 },
-		{ id: "Gillenormand", group: 5 },
-		{ id: "Magnon", group: 5 },
-		{ id: "Mlle.Gillenormand", group: 5 },
-		{ id: "Mme.Pontmercy", group: 5 },
-		{ id: "Mlle.Vaubois", group: 5 },
-		{ id: "Lt.Gillenormand", group: 5 },
-		{ id: "Marius", group: 8 },
-		{ id: "BaronessT", group: 5 },
-		{ id: "Mabeuf", group: 8 },
-		{ id: "Enjolras", group: 8 },
-		{ id: "Combeferre", group: 8 },
-		{ id: "Prouvaire", group: 8 },
-		{ id: "Feuilly", group: 8 },
-		{ id: "Courfeyrac", group: 8 },
-		{ id: "Bahorel", group: 8 },
-		{ id: "Bossuet", group: 8 },
-		{ id: "Joly", group: 8 },
-		{ id: "Grantaire", group: 8 },
-		{ id: "MotherPlutarch", group: 9 },
-		{ id: "Gueulemer", group: 4 },
-		{ id: "Babet", group: 4 },
-		{ id: "Claquesous", group: 4 },
-		{ id: "Montparnasse", group: 4 },
-		{ id: "Toussaint", group: 5 },
-		{ id: "Child1", group: 10 },
-		{ id: "Child2", group: 10 },
-		{ id: "Brujon", group: 4 },
-		{ id: "Mme.Hucheloup", group: 8 },
-	],
-	links: [
-		{ source: "Napoleon", target: "Myriel", value: 1 },
-		{ source: "Mlle.Baptistine", target: "Myriel", value: 8 },
-		{ source: "Mme.Magloire", target: "Myriel", value: 10 },
-		{ source: "Mme.Magloire", target: "Mlle.Baptistine", value: 6 },
-		{ source: "CountessdeLo", target: "Myriel", value: 1 },
-		{ source: "Geborand", target: "Myriel", value: 1 },
-		{ source: "Champtercier", target: "Myriel", value: 1 },
-		{ source: "Cravatte", target: "Myriel", value: 1 },
-		{ source: "Count", target: "Myriel", value: 2 },
-		{ source: "OldMan", target: "Myriel", value: 1 },
-		{ source: "Valjean", target: "Labarre", value: 1 },
-		{ source: "Valjean", target: "Mme.Magloire", value: 3 },
-		{ source: "Valjean", target: "Mlle.Baptistine", value: 3 },
-		{ source: "Valjean", target: "Myriel", value: 5 },
-		{ source: "Marguerite", target: "Valjean", value: 1 },
-		{ source: "Mme.deR", target: "Valjean", value: 1 },
-		{ source: "Isabeau", target: "Valjean", value: 1 },
-		{ source: "Gervais", target: "Valjean", value: 1 },
-		{ source: "Listolier", target: "Tholomyes", value: 4 },
-		{ source: "Fameuil", target: "Tholomyes", value: 4 },
-		{ source: "Fameuil", target: "Listolier", value: 4 },
-		{ source: "Blacheville", target: "Tholomyes", value: 4 },
-		{ source: "Blacheville", target: "Listolier", value: 4 },
-		{ source: "Blacheville", target: "Fameuil", value: 4 },
-		{ source: "Favourite", target: "Tholomyes", value: 3 },
-		{ source: "Favourite", target: "Listolier", value: 3 },
-		{ source: "Favourite", target: "Fameuil", value: 3 },
-		{ source: "Favourite", target: "Blacheville", value: 4 },
-		{ source: "Dahlia", target: "Tholomyes", value: 3 },
-		{ source: "Dahlia", target: "Listolier", value: 3 },
-		{ source: "Dahlia", target: "Fameuil", value: 3 },
-		{ source: "Dahlia", target: "Blacheville", value: 3 },
-		{ source: "Dahlia", target: "Favourite", value: 5 },
-		{ source: "Zephine", target: "Tholomyes", value: 3 },
-		{ source: "Zephine", target: "Listolier", value: 3 },
-		{ source: "Zephine", target: "Fameuil", value: 3 },
-		{ source: "Zephine", target: "Blacheville", value: 3 },
-		{ source: "Zephine", target: "Favourite", value: 4 },
-		{ source: "Zephine", target: "Dahlia", value: 4 },
-		{ source: "Fantine", target: "Tholomyes", value: 3 },
-		{ source: "Fantine", target: "Listolier", value: 3 },
-		{ source: "Fantine", target: "Fameuil", value: 3 },
-		{ source: "Fantine", target: "Blacheville", value: 3 },
-		{ source: "Fantine", target: "Favourite", value: 4 },
-		{ source: "Fantine", target: "Dahlia", value: 4 },
-		{ source: "Fantine", target: "Zephine", value: 4 },
-		{ source: "Fantine", target: "Marguerite", value: 2 },
-		{ source: "Fantine", target: "Valjean", value: 9 },
-		{ source: "Mme.Thenardier", target: "Fantine", value: 2 },
-		{ source: "Mme.Thenardier", target: "Valjean", value: 7 },
-		{ source: "Thenardier", target: "Mme.Thenardier", value: 13 },
-		{ source: "Thenardier", target: "Fantine", value: 1 },
-		{ source: "Thenardier", target: "Valjean", value: 12 },
-		{ source: "Cosette", target: "Mme.Thenardier", value: 4 },
-		{ source: "Cosette", target: "Valjean", value: 31 },
-		{ source: "Cosette", target: "Tholomyes", value: 1 },
-		{ source: "Cosette", target: "Thenardier", value: 1 },
-		{ source: "Javert", target: "Valjean", value: 17 },
-		{ source: "Javert", target: "Fantine", value: 5 },
-		{ source: "Javert", target: "Thenardier", value: 5 },
-		{ source: "Javert", target: "Mme.Thenardier", value: 1 },
-		{ source: "Javert", target: "Cosette", value: 1 },
-		{ source: "Fauchelevent", target: "Valjean", value: 8 },
-		{ source: "Fauchelevent", target: "Javert", value: 1 },
-		{ source: "Bamatabois", target: "Fantine", value: 1 },
-		{ source: "Bamatabois", target: "Javert", value: 1 },
-		{ source: "Bamatabois", target: "Valjean", value: 2 },
-		{ source: "Perpetue", target: "Fantine", value: 1 },
-		{ source: "Simplice", target: "Perpetue", value: 2 },
-		{ source: "Simplice", target: "Valjean", value: 3 },
-		{ source: "Simplice", target: "Fantine", value: 2 },
-		{ source: "Simplice", target: "Javert", value: 1 },
-		{ source: "Scaufflaire", target: "Valjean", value: 1 },
-		{ source: "Woman1", target: "Valjean", value: 2 },
-		{ source: "Woman1", target: "Javert", value: 1 },
-		{ source: "Judge", target: "Valjean", value: 3 },
-		{ source: "Judge", target: "Bamatabois", value: 2 },
-		{ source: "Champmathieu", target: "Valjean", value: 3 },
-		{ source: "Champmathieu", target: "Judge", value: 3 },
-		{ source: "Champmathieu", target: "Bamatabois", value: 2 },
-		{ source: "Brevet", target: "Judge", value: 2 },
-		{ source: "Brevet", target: "Champmathieu", value: 2 },
-		{ source: "Brevet", target: "Valjean", value: 2 },
-		{ source: "Brevet", target: "Bamatabois", value: 1 },
-		{ source: "Chenildieu", target: "Judge", value: 2 },
-		{ source: "Chenildieu", target: "Champmathieu", value: 2 },
-		{ source: "Chenildieu", target: "Brevet", value: 2 },
-		{ source: "Chenildieu", target: "Valjean", value: 2 },
-		{ source: "Chenildieu", target: "Bamatabois", value: 1 },
-		{ source: "Cochepaille", target: "Judge", value: 2 },
-		{ source: "Cochepaille", target: "Champmathieu", value: 2 },
-		{ source: "Cochepaille", target: "Brevet", value: 2 },
-		{ source: "Cochepaille", target: "Chenildieu", value: 2 },
-		{ source: "Cochepaille", target: "Valjean", value: 2 },
-		{ source: "Cochepaille", target: "Bamatabois", value: 1 },
-		{ source: "Pontmercy", target: "Thenardier", value: 1 },
-		{ source: "Boulatruelle", target: "Thenardier", value: 1 },
-		{ source: "Eponine", target: "Mme.Thenardier", value: 2 },
-		{ source: "Eponine", target: "Thenardier", value: 3 },
-		{ source: "Anzelma", target: "Eponine", value: 2 },
-		{ source: "Anzelma", target: "Thenardier", value: 2 },
-		{ source: "Anzelma", target: "Mme.Thenardier", value: 1 },
-		{ source: "Woman2", target: "Valjean", value: 3 },
-		{ source: "Woman2", target: "Cosette", value: 1 },
-		{ source: "Woman2", target: "Javert", value: 1 },
-		{ source: "MotherInnocent", target: "Fauchelevent", value: 3 },
-		{ source: "MotherInnocent", target: "Valjean", value: 1 },
-		{ source: "Gribier", target: "Fauchelevent", value: 2 },
-		{ source: "Mme.Burgon", target: "Jondrette", value: 1 },
-		{ source: "Gavroche", target: "Mme.Burgon", value: 2 },
-		{ source: "Gavroche", target: "Thenardier", value: 1 },
-		{ source: "Gavroche", target: "Javert", value: 1 },
-		{ source: "Gavroche", target: "Valjean", value: 1 },
-		{ source: "Gillenormand", target: "Cosette", value: 3 },
-		{ source: "Gillenormand", target: "Valjean", value: 2 },
-		{ source: "Magnon", target: "Gillenormand", value: 1 },
-		{ source: "Magnon", target: "Mme.Thenardier", value: 1 },
-		{ source: "Mlle.Gillenormand", target: "Gillenormand", value: 9 },
-		{ source: "Mlle.Gillenormand", target: "Cosette", value: 2 },
-		{ source: "Mlle.Gillenormand", target: "Valjean", value: 2 },
-		{ source: "Mme.Pontmercy", target: "Mlle.Gillenormand", value: 1 },
-		{ source: "Mme.Pontmercy", target: "Pontmercy", value: 1 },
-		{ source: "Mlle.Vaubois", target: "Mlle.Gillenormand", value: 1 },
-		{ source: "Lt.Gillenormand", target: "Mlle.Gillenormand", value: 2 },
-		{ source: "Lt.Gillenormand", target: "Gillenormand", value: 1 },
-		{ source: "Lt.Gillenormand", target: "Cosette", value: 1 },
-		{ source: "Marius", target: "Mlle.Gillenormand", value: 6 },
-		{ source: "Marius", target: "Gillenormand", value: 12 },
-		{ source: "Marius", target: "Pontmercy", value: 1 },
-		{ source: "Marius", target: "Lt.Gillenormand", value: 1 },
-		{ source: "Marius", target: "Cosette", value: 21 },
-		{ source: "Marius", target: "Valjean", value: 19 },
-		{ source: "Marius", target: "Tholomyes", value: 1 },
-		{ source: "Marius", target: "Thenardier", value: 2 },
-		{ source: "Marius", target: "Eponine", value: 5 },
-		{ source: "Marius", target: "Gavroche", value: 4 },
-		{ source: "BaronessT", target: "Gillenormand", value: 1 },
-		{ source: "BaronessT", target: "Marius", value: 1 },
-		{ source: "Mabeuf", target: "Marius", value: 1 },
-		{ source: "Mabeuf", target: "Eponine", value: 1 },
-		{ source: "Mabeuf", target: "Gavroche", value: 1 },
-		{ source: "Enjolras", target: "Marius", value: 7 },
-		{ source: "Enjolras", target: "Gavroche", value: 7 },
-		{ source: "Enjolras", target: "Javert", value: 6 },
-		{ source: "Enjolras", target: "Mabeuf", value: 1 },
-		{ source: "Enjolras", target: "Valjean", value: 4 },
-		{ source: "Combeferre", target: "Enjolras", value: 15 },
-		{ source: "Combeferre", target: "Marius", value: 5 },
-		{ source: "Combeferre", target: "Gavroche", value: 6 },
-		{ source: "Combeferre", target: "Mabeuf", value: 2 },
-		{ source: "Prouvaire", target: "Gavroche", value: 1 },
-		{ source: "Prouvaire", target: "Enjolras", value: 4 },
-		{ source: "Prouvaire", target: "Combeferre", value: 2 },
-		{ source: "Feuilly", target: "Gavroche", value: 2 },
-		{ source: "Feuilly", target: "Enjolras", value: 6 },
-		{ source: "Feuilly", target: "Prouvaire", value: 2 },
-		{ source: "Feuilly", target: "Combeferre", value: 5 },
-		{ source: "Feuilly", target: "Mabeuf", value: 1 },
-		{ source: "Feuilly", target: "Marius", value: 1 },
-		{ source: "Courfeyrac", target: "Marius", value: 9 },
-		{ source: "Courfeyrac", target: "Enjolras", value: 17 },
-		{ source: "Courfeyrac", target: "Combeferre", value: 13 },
-		{ source: "Courfeyrac", target: "Gavroche", value: 7 },
-		{ source: "Courfeyrac", target: "Mabeuf", value: 2 },
-		{ source: "Courfeyrac", target: "Eponine", value: 1 },
-		{ source: "Courfeyrac", target: "Feuilly", value: 6 },
-		{ source: "Courfeyrac", target: "Prouvaire", value: 3 },
-		{ source: "Bahorel", target: "Combeferre", value: 5 },
-		{ source: "Bahorel", target: "Gavroche", value: 5 },
-		{ source: "Bahorel", target: "Courfeyrac", value: 6 },
-		{ source: "Bahorel", target: "Mabeuf", value: 2 },
-		{ source: "Bahorel", target: "Enjolras", value: 4 },
-		{ source: "Bahorel", target: "Feuilly", value: 3 },
-		{ source: "Bahorel", target: "Prouvaire", value: 2 },
-		{ source: "Bahorel", target: "Marius", value: 1 },
-		{ source: "Bossuet", target: "Marius", value: 5 },
-		{ source: "Bossuet", target: "Courfeyrac", value: 12 },
-		{ source: "Bossuet", target: "Gavroche", value: 5 },
-		{ source: "Bossuet", target: "Bahorel", value: 4 },
-		{ source: "Bossuet", target: "Enjolras", value: 10 },
-		{ source: "Bossuet", target: "Feuilly", value: 6 },
-		{ source: "Bossuet", target: "Prouvaire", value: 2 },
-		{ source: "Bossuet", target: "Combeferre", value: 9 },
-		{ source: "Bossuet", target: "Mabeuf", value: 1 },
-		{ source: "Bossuet", target: "Valjean", value: 1 },
-		{ source: "Joly", target: "Bahorel", value: 5 },
-		{ source: "Joly", target: "Bossuet", value: 7 },
-		{ source: "Joly", target: "Gavroche", value: 3 },
-		{ source: "Joly", target: "Courfeyrac", value: 5 },
-		{ source: "Joly", target: "Enjolras", value: 5 },
-		{ source: "Joly", target: "Feuilly", value: 5 },
-		{ source: "Joly", target: "Prouvaire", value: 2 },
-		{ source: "Joly", target: "Combeferre", value: 5 },
-		{ source: "Joly", target: "Mabeuf", value: 1 },
-		{ source: "Joly", target: "Marius", value: 2 },
-		{ source: "Grantaire", target: "Bossuet", value: 3 },
-		{ source: "Grantaire", target: "Enjolras", value: 3 },
-		{ source: "Grantaire", target: "Combeferre", value: 1 },
-		{ source: "Grantaire", target: "Courfeyrac", value: 2 },
-		{ source: "Grantaire", target: "Joly", value: 2 },
-		{ source: "Grantaire", target: "Gavroche", value: 1 },
-		{ source: "Grantaire", target: "Bahorel", value: 1 },
-		{ source: "Grantaire", target: "Feuilly", value: 1 },
-		{ source: "Grantaire", target: "Prouvaire", value: 1 },
-		{ source: "MotherPlutarch", target: "Mabeuf", value: 3 },
-		{ source: "Gueulemer", target: "Thenardier", value: 5 },
-		{ source: "Gueulemer", target: "Valjean", value: 1 },
-		{ source: "Gueulemer", target: "Mme.Thenardier", value: 1 },
-		{ source: "Gueulemer", target: "Javert", value: 1 },
-		{ source: "Gueulemer", target: "Gavroche", value: 1 },
-		{ source: "Gueulemer", target: "Eponine", value: 1 },
-		{ source: "Babet", target: "Thenardier", value: 6 },
-		{ source: "Babet", target: "Gueulemer", value: 6 },
-		{ source: "Babet", target: "Valjean", value: 1 },
-		{ source: "Babet", target: "Mme.Thenardier", value: 1 },
-		{ source: "Babet", target: "Javert", value: 2 },
-		{ source: "Babet", target: "Gavroche", value: 1 },
-		{ source: "Babet", target: "Eponine", value: 1 },
-		{ source: "Claquesous", target: "Thenardier", value: 4 },
-		{ source: "Claquesous", target: "Babet", value: 4 },
-		{ source: "Claquesous", target: "Gueulemer", value: 4 },
-		{ source: "Claquesous", target: "Valjean", value: 1 },
-		{ source: "Claquesous", target: "Mme.Thenardier", value: 1 },
-		{ source: "Claquesous", target: "Javert", value: 1 },
-		{ source: "Claquesous", target: "Eponine", value: 1 },
-		{ source: "Claquesous", target: "Enjolras", value: 1 },
-		{ source: "Montparnasse", target: "Javert", value: 1 },
-		{ source: "Montparnasse", target: "Babet", value: 2 },
-		{ source: "Montparnasse", target: "Gueulemer", value: 2 },
-		{ source: "Montparnasse", target: "Claquesous", value: 2 },
-		{ source: "Montparnasse", target: "Valjean", value: 1 },
-		{ source: "Montparnasse", target: "Gavroche", value: 1 },
-		{ source: "Montparnasse", target: "Eponine", value: 1 },
-		{ source: "Montparnasse", target: "Thenardier", value: 1 },
-		{ source: "Toussaint", target: "Cosette", value: 2 },
-		{ source: "Toussaint", target: "Javert", value: 1 },
-		{ source: "Toussaint", target: "Valjean", value: 1 },
-		{ source: "Child1", target: "Gavroche", value: 2 },
-		{ source: "Child2", target: "Gavroche", value: 2 },
-		{ source: "Child2", target: "Child1", value: 3 },
-		{ source: "Brujon", target: "Babet", value: 3 },
-		{ source: "Brujon", target: "Gueulemer", value: 3 },
-		{ source: "Brujon", target: "Thenardier", value: 3 },
-		{ source: "Brujon", target: "Gavroche", value: 1 },
-		{ source: "Brujon", target: "Eponine", value: 1 },
-		{ source: "Brujon", target: "Claquesous", value: 1 },
-		{ source: "Brujon", target: "Montparnasse", value: 1 },
-		{ source: "Mme.Hucheloup", target: "Bossuet", value: 1 },
-		{ source: "Mme.Hucheloup", target: "Joly", value: 1 },
-		{ source: "Mme.Hucheloup", target: "Grantaire", value: 1 },
-		{ source: "Mme.Hucheloup", target: "Bahorel", value: 1 },
-		{ source: "Mme.Hucheloup", target: "Courfeyrac", value: 1 },
-		{ source: "Mme.Hucheloup", target: "Gavroche", value: 1 },
-		{ source: "Mme.Hucheloup", target: "Enjolras", value: 1 },
-	],
-};
-
 const widthCluster = 500,
-	heightCluster = 500;
+	heightCluster = 400;
 
 let dataCluster;
+let dataClusterEdge;
 
-async function initClustersGraph() {
-	dataCluster = await d3.json("../data/cluster_membership.json");
-	dataClusterEdge = await d3.json("../data/edges_data_new.json");
+let clusterLevel = 1;
 
-	dataClusterEdge.edge_table.forEach((data) => {
-		data.latencies = data.latencies
-			.replace('"', "")
-			.replace("[", "")
-			.replace("]", "")
-			.split(", ");
+let toggleDisplay;
+
+let nodesIndepth = [];
+let linksIndepth = [];
+
+const drag = (simulation) => {
+	function dragstarted(event) {
+		if (!event.active) simulation.alphaTarget(0.3).restart();
+		event.subject.fx = event.subject.x;
+		event.subject.fy = event.subject.y;
+	}
+
+	function dragged(event) {
+		event.subject.fx = event.x;
+		event.subject.fy = event.y;
+	}
+
+	function dragended(event) {
+		if (!event.active) simulation.alphaTarget(0);
+		event.subject.fx = null;
+		event.subject.fy = null;
+	}
+
+	return d3
+		.drag()
+		.on("start", dragstarted)
+		.on("drag", dragged)
+		.on("end", dragended);
+};
+
+const scale = d3.scaleOrdinal(
+	d3.schemeCategory10.filter((colorValue) => colorValue !== "#7f7f7f")
+);
+
+const colorCluster = (id) => {
+	return scale(id);
+};
+
+const showClusterIndepthGraph = (id) => {
+	const latencyRange = parseInt(document.getElementById("myRange").value);
+
+	dataClusterEdge.nodes.forEach((data) => {
+		if (
+			data.communityMembership.includes(id.toString()) &&
+			data.latencies <= parseInt(latencyRange)
+		) {
+			nodesIndepth.push({
+				...data,
+				source: true,
+			});
+		}
 	});
-	const nodes = [];
 
-	dataClusterEdge.edge_table.forEach((data) => {
-		let source,
-			target = false;
-		if (data.source === data.target) {
-			if (!nodes.some((nodeData) => nodeData.id === data.source)) {
-				nodes.push({ id: data.source });
-			}
-		} else {
-			if (!nodes.some((nodeData) => nodeData.id === data.source)) source = true;
-			else if (!nodes.some((nodeData) => nodeData.id === data.target))
-				target = true;
+	dataClusterEdge.links.forEach((data) => {
+		const latencyMax = data.latencies[data.latencies.length - 1];
+		if (
+			data.community_membership.includes(id.toString()) &&
+			latencyMax <= latencyRange
+		) {
+			linksIndepth.push({
+				...data,
+			});
 		}
-		if (source) nodes.push({ id: data.source });
-		if (target) nodes.push({ id: data.target });
 	});
 
-	console.log(dataClusterEdge);
-	console.log(nodes);
-
-	const backBtn = document.getElementById("clusterBackBtn");
-	const clusterGraphMain = document.getElementById("clusterMainGraph");
-
-	const linkExtent = d3.extent(dataCluster.links.map((data) => data.value));
-	const linkValue = d3.scaleOrdinal().domain(linkExtent).range([1, 10]);
-	console.log(linkExtent);
-	const scale = d3.scaleOrdinal(d3.schemeDark2);
-
-	const colorCluster = (d) => {
-		console.log(scale(d.group));
-		return scale(d.group);
-	};
-
-	const drag = (simulation) => {
-		function dragstarted(event) {
-			if (!event.active) simulation.alphaTarget(0.3).restart();
-			event.subject.fx = event.subject.x;
-			event.subject.fy = event.subject.y;
+	linksIndepth.forEach((linkData) => {
+		if (!nodesIndepth.some((data) => linkData.target === data.id)) {
+			const remainingNodeData = {
+				id: linkData.target,
+				communityMembership: linkData.community_membership,
+				source: false,
+				depth: 1,
+			};
+			nodesIndepth.push({
+				...remainingNodeData,
+			});
 		}
+	});
 
-		function dragged(event) {
-			event.subject.fx = event.x;
-			event.subject.fy = event.y;
-		}
+	prepareData(id, linksIndepth);
 
-		function dragended(event) {
-			if (!event.active) simulation.alphaTarget(0);
-			event.subject.fx = null;
-			event.subject.fy = null;
-		}
-
-		return d3
-			.drag()
-			.on("start", dragstarted)
-			.on("drag", dragged)
-			.on("end", dragended);
-	};
-
-	const simulation = d3
-		.forceSimulation(dataCluster.nodes)
+	const simulationClusterInDepth = d3
+		.forceSimulation(nodesIndepth)
 		.force(
 			"link",
 			d3
-				.forceLink(dataCluster.links)
-				.id((d) => d.id)
-				.distance(200)
+			.forceLink(linksIndepth)
+			.id((d) => d.id)
+			.distance(120)
 		)
 		.force("charge", d3.forceManyBody())
-		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2));
+		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2 + 20))
+		.force("forceX", d3.forceX().strength(0.1));
 
-	const toggleDisplay = () => {
-		backBtn.classList.toggle("d-none");
-		clusterGraphMain.classList.toggle("d-none");
-	};
-
-	backBtn.addEventListener("click", () => {
-		toggleDisplay();
-	});
-
-	const svg = d3
-		.select(".main-graph")
+	const svgClusterInDepth = d3
+		.select(".indepth-graph")
 		.append("svg")
-		.attr("viewBox", [0, 0, widthCluster, heightCluster]);
+		.attr("id", "svgClusterInDepth")
+		//.attr("viewBox", [0, 0, widthCluster + 100, heightCluster + 100]);
+		.attr("width", widthCluster)
+		.attr("height", heightCluster);
 
-	const link = svg
+	svgClusterInDepth
+		.append("defs")
+		.append("marker")
+		.attrs({
+			id: "ClusterIndepth",
+			viewBox: "-0 -5 10 12",
+			refX: 15,
+			refY: 0,
+			orient: "auto",
+			markerWidth: 10,
+			markerHeight: 10,
+			xoverflow: "visible",
+		})
+		.append("svg:path")
+		.attr("d", "M 0,-5 L 10 ,0 L 0,5")
+		.attr("fill", "#e0e0e0")
+		.style("stroke", "none");
+
+	const linkClusterInDepth = svgClusterInDepth
 		.append("g")
-		.attr("stroke", "#666")
-		.attr("stroke-opacity", 0.6)
+		.attr("stroke", "#e0e0e0")
+		.attr("stroke-opacity", 0.4)
 		.selectAll("line")
-		.data(dataCluster.links)
+		.data(linksIndepth)
 		.join("line")
-		.attr("stroke-width", (d) => linkValue(d.value) * 1.5);
+		.attr("stroke-width", (d) => 1)
+		.attr("marker-end", "url(#ClusterIndepth)");
 
-	const node = svg
+	const nodeClusterInDepth = svgClusterInDepth
 		.append("g")
-		.attr("stroke", "#fff")
-		.attr("stroke-width", 1.5)
 		.selectAll("circle")
-		.data(dataCluster.nodes)
+		.data(nodesIndepth)
 		.join("circle")
-		.attr("r", 35)
-		.attr("fill", colorCluster)
-		.call(drag(simulation))
-		.on("click", toggleDisplay);
+		.attr("stroke", "#e0e0e0")
+		.attr("r", (d) => (d.source ? 10 : 5))
+		.attr("fill", colorCluster(id))
+		.on("click", (event, d) => {
+			if (d.source)
+				toggleDisplay({
+					...d,
+					communityID: id,
+				});
+		})
+		.on("mouseover", inDepthNodeHovered)
+		.on("mouseout", inDepthNodeHoveredOut)
+		.call(drag(simulationClusterInDepth));
 
-	simulation.on("tick", () => {
-		link
+	simulationClusterInDepth.on("tick", () => {
+		linkClusterInDepth
 			.attr("x1", (d) => d.source.x + 1)
 			.attr("y1", (d) => d.source.y + 1)
 			.attr("x2", (d) => d.target.x + 1)
 			.attr("y2", (d) => d.target.y + 1);
 
-		node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+		nodeClusterInDepth.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+	});
+};
+
+function inDepthNodeHovered(d, i) {
+	if (i.depth === 1) return;
+	if (i.source) {
+		let numofTargets = linksIndepth.filter(
+			(sources) => sources.source.id == i.id
+		).length;
+		toolTip.transition().duration(200).style("opacity", 0.9);
+		toolTip
+			.html(generateData(i, numofTargets, true))
+			.style("left", d.pageX + "px")
+			.style("top", d.pageY + "px");
+	} else {
+		toolTip.transition().duration(200).style("opacity", 0.9);
+		toolTip
+			.html(generateData(i, i.sourceName, false))
+			.style("left", d.pageX + "px")
+			.style("top", d.pageY + "px");
+	}
+}
+
+function inDepthNodeHoveredOut(d, i) {
+	toolTip.transition().duration(500).style("opacity", 0);
+}
+
+function generateData(i, variable, isSource) {
+	let text;
+	if (isSource) {
+		text =
+			`<table>
+                            <tr><td>Source: </td><td>` +
+			i.id +
+			`</td></tr>
+                            <tr><td>No of Targets: </td><td>` +
+			variable +
+			`</td></tr>
+					</table>`;
+		return text;
+	} else {
+		text =
+			`<table>
+                            <tr><td>Source: </td><td>` +
+			variable +
+			`</td></tr>
+                            <tr><td>Target: </td><td>` +
+			i.id +
+			`</td></tr>
+					</table>`;
+		return text;
+	}
+}
+
+const showClusterSourceGraph = (data) => {
+	const stNodeList = [];
+	const stLinksList = [];
+	nodesIndepth.forEach((dataIndepth) => {
+		if (dataIndepth.id == data.id) {
+			const sourceNodeData = {
+				id: dataIndepth.id,
+				communityID: data.communityID,
+				source: true,
+			};
+			stNodeList.push({
+				...sourceNodeData,
+			});
+		}
+	});
+	linksIndepth.forEach((dataLinks) => {
+		if (dataLinks.source.id == data.id) {
+			const sourceLinksData = {
+				source: dataLinks.source.id,
+				target: dataLinks.target.id,
+				weight: dataLinks.weight,
+				transition_probabilities: dataLinks.transition_probabilities,
+			};
+			stLinksList.push({
+				...sourceLinksData,
+			});
+		}
+	});
+	stLinksList.forEach((linkData) => {
+		if (!stNodeList.some((data) => linkData.target === data.id)) {
+			const remainingNodeData = {
+				id: linkData.target,
+				communityID: data.communityID,
+				sourceName: data.id,
+				source: false,
+				depth: 2,
+			};
+			stNodeList.push({
+				...remainingNodeData,
+			});
+		}
+	});
+	const simulationClusterSTDepth = d3
+		.forceSimulation(stNodeList)
+		.force(
+			"link",
+			d3
+			.forceLink(stLinksList)
+			.id((d) => d.id)
+			.distance(150)
+		)
+		.force("charge", d3.forceManyBody())
+		.force(
+			"center",
+			d3.forceCenter(widthCluster / 2 + 30, heightCluster / 2 + 70)
+		)
+		.force("forceX", d3.forceX().strength(0.1));
+
+	const svgClusterSTDepth = d3
+		.select(".st-graph")
+		.append("svg")
+		.attr("id", "svgClusterSTDepth")
+		.attr("width", widthCluster + 100)
+		.attr("height", heightCluster + 100);
+
+	svgClusterSTDepth
+		.append("defs")
+		.append("marker")
+		.attrs({
+			id: "stDepth",
+			viewBox: "-0 -5 10 12",
+			refX: 15,
+			refY: 0,
+			orient: "auto",
+			markerWidth: 10,
+			markerHeight: 10,
+			xoverflow: "visible",
+		})
+		.append("svg:path")
+		.attr("d", "M 0,-5 L 10 ,0 L 0,5")
+		.attr("fill", "#e2e2e2")
+		.style("stroke", "none");
+
+	const linkClusterSTDepth = svgClusterSTDepth
+		.append("g")
+		.attr("stroke", "#e0e0e0")
+		.attr("stroke-opacity", 0.6)
+		.selectAll("line")
+		.data(stLinksList)
+		.join("line")
+		.attr("stroke-width", (d) => 1)
+		.attr("marker-end", "url(#stDepth)");
+
+	const nodeClusterSTDepth = svgClusterSTDepth
+		.append("g")
+		.attr("stroke", "#fff")
+		.selectAll("circle")
+		.data(stNodeList)
+		.join("circle")
+		.attr("r", (d) => (d.source ? 10 : 5))
+		.attr("fill", (d) => colorCluster(d.communityID))
+		.on("mouseover", inDepthNodeHovered)
+		.on("mouseout", inDepthNodeHoveredOut)
+		.call(drag(simulationClusterSTDepth));
+
+	simulationClusterSTDepth.on("tick", () => {
+		linkClusterSTDepth
+			.attr("x1", (d) => d.source.x + 1)
+			.attr("y1", (d) => d.source.y + 1)
+			.attr("x2", (d) => d.target.x + 1)
+			.attr("y2", (d) => d.target.y + 1);
+
+		nodeClusterSTDepth.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+	});
+};
+
+async function initClustersGraph() {
+	dataCluster = await d3.json("../data/cluster_membership.json");
+	dataClusterEdge = await d3.json("../data/edges_data.json");
+
+	const backBtn = document.getElementById("clusterBackBtn");
+	const clusterGraphMain = document.getElementById("clusterMainGraph");
+	const clusterIndepthGraph = document.getElementById("clusterIndepthGraph");
+	const clusterThirdGraph = document.getElementById("clusterThirdGraph");
+
+	const linkExtent = d3.extent(dataCluster.links.map((data) => data.value));
+	const linkValue = d3.scaleOrdinal().domain(linkExtent).range([1, 10]);
+
+	const simulationCluster = d3
+		.forceSimulation(dataCluster.nodes)
+		.force(
+			"link",
+			d3
+			.forceLink(dataCluster.links)
+			.id((d) => d.id)
+			.distance(150)
+		)
+		.force("charge", d3.forceManyBody())
+		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2));
+
+	toggleDisplay = (data = {}) => {
+		if (clusterLevel === 1) {
+			backBtn.classList.remove("d-none");
+			clusterIndepthGraph.classList.remove("d-none");
+			clusterGraphMain.classList.add("d-none");
+			clusterLevel = 2;
+			showClusterIndepthGraph(data.id);
+		} else if (clusterLevel === 2) {
+			clusterThirdGraph.classList.remove("d-none");
+			clusterIndepthGraph.classList.add("d-none");
+			clusterLevel = 3;
+			showClusterSourceGraph(data);
+		}
+	};
+
+	backBtn.addEventListener("click", () => {
+		if (clusterLevel == 2) {
+			backBtn.classList.add("d-none");
+			clusterGraphMain.classList.remove("d-none");
+			d3.select("#svgClusterInDepth").remove();
+			nodesIndepth = [];
+			linksIndepth = [];
+			clusterLevel = 1;
+		}
+		if (clusterLevel == 3) {
+			clusterThirdGraph.classList.add("d-none");
+			clusterIndepthGraph.classList.remove("d-none");
+			d3.select("#svgClusterSTDepth").remove();
+			clusterLevel = 2;
+		}
+	});
+
+	const svgCluster = d3
+		.select(".main-graph")
+		.append("svg")
+		.attr("width", widthCluster)
+		.attr("height", heightCluster);
+
+	const linkCluster = svgCluster
+		.append("g")
+		.attr("stroke", "#e2e2e2")
+		.attr("stroke-opacity", 0.5)
+		.selectAll("line")
+		.data(dataCluster.links)
+		.join("line")
+		.attr("stroke-width", (d) => linkValue(d.value) * 1.5);
+
+	const nodeCluster = svgCluster
+		.append("g")
+		.attr("stroke", "#e2e2e2")
+		.attr("stroke-width", 1.5)
+		.selectAll("g")
+		.data(dataCluster.nodes)
+		.enter()
+		.append("g")
+		.attr("class", "g-circle")
+		.append("circle")
+		.attr("r", 20)
+		.attr("fill", (data) => colorCluster(data.id))
+		.call(drag(simulationCluster))
+		.on("click", (mouseEvent, data) => {
+			toggleDisplay(data);
+		});
+
+	const textCluster = d3
+		.selectAll(".g-circle")
+		.data(dataCluster.nodes)
+		.append("text")
+		.text((d) => d.id);
+
+	simulationCluster.on("tick", () => {
+		linkCluster
+			.attr("x1", (d) => d.source.x + 1)
+			.attr("y1", (d) => d.source.y + 1)
+			.attr("x2", (d) => d.target.x + 1)
+			.attr("y2", (d) => d.target.y + 1);
+
+		nodeCluster.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+		textCluster.attr("x", (d) => d.x - 5).attr("y", (d) => d.y + 5);
 	});
 }
 

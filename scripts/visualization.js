@@ -1,10 +1,7 @@
-// Hide submenus
 $("#body-row .collapse").collapse("hide");
 
-// Collapse/Expand icon
 $("#collapse-icon").addClass("fa-angle-double-left");
 
-SidebarCollapse();
 $("[data-toggle=sidebar-colapse]").click(function () {
 	SidebarCollapse();
 });
@@ -18,7 +15,6 @@ function SidebarCollapse() {
 	$(".submenu-icon").toggleClass("d-none");
 	$("#sidebar-container").toggleClass("sidebar-expanded sidebar-collapsed");
 
-	// Treating d-flex/d-none on separators with title
 	var SeparatorTitle = $(".sidebar-separator-title");
 	if (SeparatorTitle.hasClass("d-flex")) {
 		SeparatorTitle.removeClass("d-flex");
@@ -26,23 +22,14 @@ function SidebarCollapse() {
 		SeparatorTitle.addClass("d-flex");
 	}
 
-	// Collapse/Expand icon
 	$("#collapse-icon").toggleClass("fa-angle-double-left fa-angle-double-right");
 }
-
-$("#inputGroupFile02").on("change", function () {
-	let fileName = $(this).val().split("\\").pop();
-	$(this).next(".custom-file-label").html(fileName);
-	$("#inputGroupFileAddon02").click(function () {
-		$(".toast").toast("show");
-	});
-});
 
 const range = document.getElementById("myRange");
 const rangeV = document.getElementById("rangeV");
 const setValue = () => {
 	const newValue = Number(
-		((range.value - range.min + 270) * 100) / (range.max - range.min + 270)
+		((range.value - range.min + 400) * 100) / (range.max - range.min + 400)
 	);
 	const newPosition = 10 - newValue * 0.5;
 	rangeV.innerHTML = `<span>${range.value}</span>`;
@@ -51,50 +38,13 @@ const setValue = () => {
 document.addEventListener("DOMContentLoaded", setValue);
 range.addEventListener("input", setValue);
 
-//Upload Files to S3
-function uploadFile() {
-	const inputFile = document.getElementById("inputGroupFile02").files[0];
-	if (inputFile == null) {
-		alert("No File selected");
-	} else {
-		getSignedRequest(inputFile);
-	}
-}
-
-function getSignedRequest(file) {
-	fetch(`${baseUrl}/sign-s3?file-name=${file.name}&file-type=${file.type}`)
-		.then(function (response) {
-			if (response.status === 200) {
-				response.json().then(function (data) {
-					uploadFileToS3(file, data.signedRequest, data.url);
-				});
-			} else {
-				alert("Could not get signed URL.");
-				return;
-			}
-		})
-		.catch(function (err) {
-			console.log("Fetch Error :-S", err);
-		});
-}
-
-function uploadFileToS3(file, signedRequest, url) {
-	fetch(signedRequest, {
-			method: "PUT",
-			body: file
-		})
-		.then(function (response) {
-			if (response.status === 200) {
-				console.log("DONE!");
-			} else {
-				alert("Could not upload file.");
-				return;
-			}
-		})
-		.catch(function (err) {
-			console.log("Fetch Error :-S", err);
-		});
-}
+const min = range.min
+const max = range.max
+const value = range.value
+range.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${(value-min)/(max-min)*100}%, #DEE2E6 ${(value-min)/(max-min)*100}%, #DEE2E6 100%)`
+range.oninput = function () {
+	this.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${(this.value-this.min)/(this.max-this.min)*100}%, #DEE2E6 ${(this.value-this.min)/(this.max-this.min)*100}%, #DEE2E6 100%)`
+};
 
 const toolTip = d3
 	.select('body')

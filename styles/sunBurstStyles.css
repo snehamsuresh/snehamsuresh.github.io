@@ -1,0 +1,45 @@
+.risk-factor {
+    margin-top: 28px;
+    margin-right: 5px;
+}
+
+.risk-factor>div {
+    margin-top: 5px;
+}
+
+.sunburst-graph {
+    float: left;
+}
+
+.risk-low>div {
+    font-size: 18px;
+    font-weight: 500;
+    color: #00D200;
+}
+
+.risk-mod>div {
+    font-size: 18px;
+    font-weight: 500;
+    color: #FFAA32;
+}
+
+.risk-high>div {
+    font-size: 18px;
+    font-weight: 500;
+    color: #E3005B;
+}
+
+.cluster-text {
+    padding-top: 40px;
+    font-size: 20px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.text-risk {
+    padding-top: 7px;
+    font-size: 20px;
+    font-weight: 500;
+    padding-bottom: 20px;
+    opacity: 0.8;
+}

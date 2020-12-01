@@ -1,203 +1,226 @@
+html,
+body {
+	height: 100%;
+	background-color: #343a40;
+}
+
 #body-row {
-    margin-left: 0;
-    margin-right: 0;
+	margin-left: 0;
+	margin-right: 0;
 }
 
 #sidebar-container {
-    min-height: 100vh;
-    background-color: #333;
-    padding: 0;
+	background-color: #333;
+	padding: 0;
+}
+
+.clickable {
+	cursor: pointer;
 }
 
 .sidebar-expanded {
-    width: 350px;
+	width: 275px;
 }
 
 .sidebar-collapsed {
-    width: 60px;
+	width: 60px;
 }
 
-/* Menu item*/
 #sidebar-container .list-group a {
-    height: 50px;
-    color: white;
+	height: 50px;
+	color: white;
 }
 
-/* Submenu item
-#sidebar-container .list-group .sidebar-submenu a {
-    height: 45px;
-    padding-left: 30px;
-} */
-
-/* .sidebar-submenu {
-    font-size: 0.9rem;
-} */
-
-/* Separators */
 .sidebar-separator-title {
-    background-color: #333;
-    height: 35px;
+	background-color: #333;
+	height: 35px;
 }
 
 .sidebar-separator {
-    background-color: #333;
-    height: 25px;
+	background-color: #333;
+	height: 25px;
 }
 
-/* .logo-separator {
-    background-color: #333;
-    height: 60px;
-} */
-
-/* Closed submenu icon */
 #sidebar-container .list-group .list-group-item[aria-expanded="false"] .submenu-icon::after {
-    content: " \f0d7";
-    font-family: FontAwesome;
-    display: inline;
-    text-align: right;
-    padding-left: 10px;
+	content: " \f0d7";
+	font-family: FontAwesome;
+	display: inline;
+	text-align: right;
+	padding-left: 10px;
+	height: 100%;
 }
 
-/* Opened submenu icon */
 #sidebar-container .list-group .list-group-item[aria-expanded="true"] .submenu-icon::after {
-    content: " \f0da";
-    font-family: FontAwesome;
-    display: inline;
-    text-align: right;
-    padding-left: 10px;
+	content: " \f0da";
+	font-family: FontAwesome;
+	display: inline;
+	text-align: right;
+	padding-left: 10px;
 }
 
 .dropdown-toggle {
-    width: 100%;
+	width: 100%;
 }
 
 .slidecontainer {
-    width: 200%;
+	width: 200%;
 }
 
 .slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 15px;
-    border-radius: 10px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: 0.2s;
-    transition: opacity 0.2s;
+	-webkit-appearance: none;
+	width: 80%;
+	height: 15px;
+	border-radius: 10px;
+	background: #d3d3d3;
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: 0.2s;
+	transition: opacity 0.2s;
 }
 
 .slider:hover {
-    opacity: 1;
+	opacity: 1;
 }
 
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: var(--primary);
-    cursor: pointer;
+	-webkit-appearance: none;
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background: var(--secondary);
+	cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: var(--primary);
-    cursor: pointer;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background: var(--primary);
+	cursor: pointer;
 }
 
 .range-value {
-    position: absolute;
-    top: -50%;
+	position: absolute;
+	top: -50%;
 }
 
 .range-value span {
-    width: 30px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    background: var(--primary);
-    color: #fff;
-    font-size: 12px;
-    display: block;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
-    border-radius: 6px;
-    opacity: 0.7;
+	width: 30px;
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+	background: var(--primary);
+	color: #fff;
+	font-size: 12px;
+	display: block;
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, 0);
+	border-radius: 6px;
+	opacity: 0.7;
 }
 
 .range-value span:before {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-top: 10px solid var(--primary);
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    margin-top: -1px;
-    opacity: 0.7;
+	content: "";
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-top: 10px solid var(--primary);
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	margin-top: -1px;
+	opacity: 0.7;
 }
 
 .link {
-    stroke: #aaa;
+	stroke: #aaa;
 }
 
 .node text {
-    stroke: #333;
-    cursor: pointer;
+	stroke: #333;
+	cursor: pointer;
 }
 
 .node circle {
-    stroke: #fff;
-    stroke-width: 3px;
-    fill: #555;
+	stroke: #fff;
+	stroke-width: 3px;
+	fill: #555;
 }
 
 * {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .main-graph {
-    float: left;
-}
-
-.sunburst-graph {
-    float: left;
-}
-
-.bar-chart {
-    position: absolute;
-    margin-left: 400px;
+	float: left;
 }
 
 div.tooltip {
-    color: white;
-    position: absolute;
-    width: 130px;
-    height: 40px;
-    padding-left: 10px;
-    padding-top: 5px;
-    font: 12px sans-serif;
-    background: white;
-    opacity: 0.2;
-    border: 2px solid black;
-    border-radius: 1px 30px 30px 30px;
-    pointer-events: none;
-}
-
-div.tooltip>span {
-    color: black;
+	color: black;
+	position: absolute;
+	width: 170px;
+	height: 60px;
+	padding-left: 10px;
+	padding-top: 5px;
+	font: 12px sans-serif;
+	background: white;
+	opacity: 0.2;
+	border: 2px solid black;
+	border-radius: 1px 30px 30px 30px;
+	pointer-events: none;
 }
 
 .patient-graph {
-    padding: 10px;
-    height: 800px;
-    width: 500px;
+	padding: 10px;
+	height: 800px;
+	width: 500px;
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: [col1-start] 50% [col1-end] 50% [col2-end];
+	grid-template-rows: [row1-start] 40% [row1-end] 55% [row2-start];
+	grid-template-areas:
+		"cluster patient"
+		"sunburst patient";
+}
+
+.cluster-item {
+	grid-area: cluster;
+	background-color: #6c757d;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.cluster-background {
+	margin: 100;
+	border-width: 5px;
+	border-color: red;
+	background-color: #6c757d;
+}
+
+.patient-item {
+	grid-area: patient;
+	position: relative;
+	background-color: #6c757d;
+	width: 100%;
+	height: 130vh;
+	overflow-y: scroll;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.sunburst-item {
+	grid-area: sunburst;
+	background-color: #6c757e;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.patient-text {
+	margin-left: 150px;
 }

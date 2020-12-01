@@ -1,5 +1,10 @@
 function showPatientGraph(data) {
 
+
+  d3.select(".patient-svg").remove();
+  d3.select('.patient-text')
+    .text(`Patient ID: ${data.name}`)
+
   const width = 300
 
   margin = ({
@@ -24,8 +29,6 @@ function showPatientGraph(data) {
     if (d.depth && d.data.name.length !== 7) d.children = null;
   });
 
-  d3.select(".patient-svg").remove();
-
   const svg = d3.select(".patient-graph").append("svg")
     .attr("viewBox", [-margin.left, -margin.top, width, dx])
     .style("font", "10px sans-serif")
@@ -48,7 +51,6 @@ function showPatientGraph(data) {
     const nodes = root.descendants().reverse();
     const links = root.links();
 
-    // Compute the new tree layout.
     tree(root);
 
     let left = root;
@@ -65,16 +67,18 @@ function showPatientGraph(data) {
       .attr("viewBox", [-margin.left, left.x - margin.top, width, height])
       .tween("resize", window.ResizeObserver ? null : () => () => svg.dispatch("toggle"));
 
-    // Update the nodes…
     const node = gNode.selectAll("g")
       .data(nodes, d => d.id);
 
-
-    // Enter any new nodes at the parent's previous position.
     const nodeEnter = node.enter().append("g")
       .attr("transform", d => `translate(${source.y0},${source.x0})`)
       .attr("fill-opacity", 0)
       .attr("stroke-opacity", 0)
+      .attr("class", (d) => {
+        if (d.depth == 0) {
+          return "root-node"
+        }
+      })
       .on("click", (event, d) => {
         d.children = d.children ? null : d._children;
         update(d);
@@ -82,38 +86,76 @@ function showPatientGraph(data) {
 
     nodeEnter.append("circle")
       .attr("r", 18)
-      .attr("fill", d => d._children ? "#555" : "#999")
-      .attr("stroke-width", 10);
+      .attr("fill", d => d._children ? "#bae8c9" : "#698a73")
+      .attr("stroke-width", 10)
 
     nodeEnter.append("text")
       .style("font", "5.75px sans-serif")
-      .style('fill', 'white')
-      .attr("dy", "0.31em")
       .attr("text-anchor", 'middle')
-      .text(d => d.data.name)
-      .clone(true).lower()
+      .text(d => {
+        if (d.depth == 0) {
+          return
+        }
+        return d.data.name
+      })
+      .attr("dy", (d) => {
+        if (d.depth == 0) {
+          return "4.5em"
+        }
+        return "0.31em"
+      })
+      .attr("dx", (d) => {
+        if (d.depth == 0) {
+          return "1em"
+        }
+        return "0em"
+      })
+      .style('fill', (d) => {
+        if (d.depth == 1) {
+          return "black"
+        }
+        return "white"
+      })
+      .clone(false).lower()
       .attr("stroke-linejoin", "round")
       .attr("stroke-width", 3)
       .attr("stroke", "white");
 
-    // Transition nodes to their new position.
+    d3.selectAll('.root-node')
+      .append("text")
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central')
+      .attr("class", "fa")
+      .attr('font-size', '20px')
+      .text(function (d) {
+        return '\uf728'
+      });
+
+
     const nodeUpdate = node.merge(nodeEnter).transition(transition)
       .attr("transform", d => `translate(${d.y},${d.x})`)
       .attr("fill-opacity", 1)
       .attr("stroke-opacity", 1);
 
-    // Transition exiting nodes to the parent's new position.
     const nodeExit = node.exit().transition(transition).remove()
       .attr("transform", d => `translate(${source.y},${source.x})`)
       .attr("fill-opacity", 0)
       .attr("stroke-opacity", 0);
 
-    // Update the links…
     const link = gLink.selectAll("path")
       .data(links, d => d.target.id);
 
-    // Enter any new links at the parent's previous position.
     const linkEnter = link.enter().append("path")
+      .attr("stroke", (d => {
+        switch (d.target.data.value) {
+          case "Low":
+            return "#00D200"
+          case "Moderate":
+            return "#FFAA32"
+          case "High":
+            return "#E3005B"
+        }
+      }))
       .attr("d", d => {
         const o = {
           x: source.x0,
@@ -125,11 +167,9 @@ function showPatientGraph(data) {
         });
       });
 
-    // Transition links to their new position.
     link.merge(linkEnter).transition(transition)
       .attr("d", diagonal);
 
-    // Transition exiting nodes to the parent's new position.
     link.exit().transition(transition).remove()
       .attr("d", d => {
         const o = {
@@ -142,7 +182,6 @@ function showPatientGraph(data) {
         });
       });
 
-    // Stash the old positions for transition.
     root.eachBefore(d => {
       d.x0 = d.x;
       d.y0 = d.y;
@@ -153,17 +192,13 @@ function showPatientGraph(data) {
 }
 
 
-Promise.all([d3.json("../data/patients.json")])
+Promise.all([d3.json("../data/patientDetails.json")])
   .then(([patientData]) => {
-
-    //get the keys
 
     patientId = []
     for (var key in patientData) {
       patientId.push(patientData[key].name);
     }
-
-    //populate the drop down
 
     patientId.forEach(patient => {
       $('#dropdownMenu').append(`<option value="${patient}"> ${patient}</option>`);
@@ -172,8 +207,16 @@ Promise.all([d3.json("../data/patients.json")])
     selectElement = document.getElementById("dropdownMenu")
     selectElement.onchange = function () {
       output = selectElement.value;
-      let selectedPatient = patientData.find(x => x.name === output)
-      showPatientGraph(selectedPatient);
+      if (output === 'Select a Patient') {
+        d3.select(".patient-svg").remove();
+        d3.select('.patient-text')
+          .html(` <p>PATIENT GRAPH<br /><span>(Select a Patient
+                                from
+                                Dropdown)</span></p>`);
+      } else {
+        let selectedPatient = patientData.find(x => x.name === output)
+        showPatientGraph(selectedPatient);
+      }
     }
 
   });
