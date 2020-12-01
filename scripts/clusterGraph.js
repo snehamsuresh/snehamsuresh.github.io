@@ -77,6 +77,7 @@ const showClusterIndepthGraph = (id) => {
 				id: linkData.target,
 				communityMembership: linkData.community_membership,
 				source: false,
+				depth: 1
 			};
 			nodesIndepth.push({
 				...remainingNodeData,
@@ -107,6 +108,22 @@ const showClusterIndepthGraph = (id) => {
 		.attr("width", widthCluster)
 		.attr("height", heightCluster);
 
+	svgClusterInDepth.append('defs').append('marker')
+		.attrs({
+			'id': 'ClusterIndepth',
+			'viewBox': '-0 -5 10 12',
+			'refX': 15,
+			'refY': 0,
+			'orient': 'auto',
+			'markerWidth': 10,
+			'markerHeight': 10,
+			'xoverflow': 'visible'
+		})
+		.append('svg:path')
+		.attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+		.attr('fill', '#999')
+		.style('stroke', 'none');
+
 	const linkClusterInDepth = svgClusterInDepth
 		.append("g")
 		.attr("stroke", "#666")
@@ -114,7 +131,8 @@ const showClusterIndepthGraph = (id) => {
 		.selectAll("line")
 		.data(linksIndepth)
 		.join("line")
-		.attr("stroke-width", (d) => 1);
+		.attr("stroke-width", (d) => 1)
+		.attr('marker-end', 'url(#ClusterIndepth)');
 
 	const nodeClusterInDepth = svgClusterInDepth
 		.append("g")
@@ -122,7 +140,7 @@ const showClusterIndepthGraph = (id) => {
 		.data(nodesIndepth)
 		.join("circle")
 		.attr("stroke", "#fff")
-		.attr("stroke-width", (d) => (d.source ? 3 : 1))
+		// .attr("stroke-width", (d) => (d.source ? 3 : 1))
 		.attr("r", (d) => (d.source ? 10 : 5))
 		.attr("fill", colorCluster(id))
 		.on("click", (event, d) => {
@@ -133,6 +151,8 @@ const showClusterIndepthGraph = (id) => {
 					communityID: id,
 				});
 		})
+		.on("mouseover", inDepthNodeHovered)
+		.on("mouseout", inDepthNodeHoveredOut)
 		.call(drag(simulationClusterInDepth));
 
 	simulationClusterInDepth.on("tick", () => {
@@ -145,6 +165,47 @@ const showClusterIndepthGraph = (id) => {
 		nodeClusterInDepth.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
 	});
 };
+
+function inDepthNodeHovered(d, i) {
+	if (i.depth === 1) return;
+	if (i.source) {
+		let numofTargets = linksIndepth.filter(sources => sources.source.id == i.id).length
+		toolTip.transition().duration(200)
+			.style('opacity', 0.9);
+		toolTip.html(generateData(i, numofTargets, true))
+			.style('left', d.pageX + 'px')
+			.style('top', d.pageY + 'px');
+	} else {
+		toolTip.transition().duration(200)
+			.style('opacity', 0.9);
+		toolTip.html(generateData(i, i.sourceName, false))
+			.style('left', d.pageX + 'px')
+			.style('top', d.pageY + 'px');
+	}
+}
+
+function inDepthNodeHoveredOut(d, i) {
+	toolTip.transition()
+		.duration(500)
+		.style('opacity', 0);
+}
+
+function generateData(i, variable, isSource) {
+	let text;
+	if (isSource) {
+		text = `<table>
+                            <tr><td>Source: </td><td>` + i.id + `</td></tr>
+                            <tr><td>No of Targets: </td><td>` + variable + `</td></tr>
+					</table>`
+		return text
+	} else {
+		text = `<table>
+                            <tr><td>Source: </td><td>` + variable + `</td></tr>
+                            <tr><td>Target: </td><td>` + i.id + `</td></tr>
+					</table>`
+		return text
+	}
+}
 
 const showClusterSourceGraph = (data) => {
 	console.log(data);
@@ -180,7 +241,10 @@ const showClusterSourceGraph = (data) => {
 			const remainingNodeData = {
 				id: linkData.target,
 				communityID: data.communityID,
+				sourceName: data.id,
 				source: false,
+				depth: 2
+
 			};
 			stNodeList.push({
 				...remainingNodeData,
@@ -215,6 +279,22 @@ const showClusterSourceGraph = (data) => {
 		.attr("width", widthCluster + 100)
 		.attr("height", heightCluster + 100);
 
+	svgClusterSTDepth.append('defs').append('marker')
+		.attrs({
+			'id': 'stDepth',
+			'viewBox': '-0 -5 10 12',
+			'refX': 15,
+			'refY': 0,
+			'orient': 'auto',
+			'markerWidth': 10,
+			'markerHeight': 10,
+			'xoverflow': 'visible'
+		})
+		.append('svg:path')
+		.attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+		.attr('fill', '#999')
+		.style('stroke', 'none');
+
 	const linkClusterSTDepth = svgClusterSTDepth
 		.append("g")
 		.attr("stroke", "#666")
@@ -222,17 +302,20 @@ const showClusterSourceGraph = (data) => {
 		.selectAll("line")
 		.data(stLinksList)
 		.join("line")
-		.attr("stroke-width", (d) => 1);
+		.attr("stroke-width", (d) => 1)
+		.attr('marker-end', 'url(#stDepth)');
 
 	const nodeClusterSTDepth = svgClusterSTDepth
 		.append("g")
 		.attr("stroke", "#fff")
-		.attr("stroke-width", 1.5)
+		// .attr("stroke-width", 1.5)
 		.selectAll("circle")
 		.data(stNodeList)
 		.join("circle")
 		.attr("r", (d) => (d.source ? 10 : 5))
 		.attr("fill", (d) => colorCluster(d.communityID))
+		.on("mouseover", inDepthNodeHovered)
+		.on("mouseout", inDepthNodeHoveredOut)
 		.call(drag(simulationClusterSTDepth));
 
 	simulationClusterSTDepth.on("tick", () => {
@@ -334,7 +417,7 @@ async function initClustersGraph() {
 		.call(drag(simulationCluster))
 		.on("click", (mouseEvent, data) => {
 			toggleDisplay(data);
-		});
+		})
 
 	const textCluster = d3
 		.selectAll(".g-circle")

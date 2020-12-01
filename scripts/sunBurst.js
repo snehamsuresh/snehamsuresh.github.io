@@ -407,16 +407,16 @@ function showEncodings(indBarData) {
     d3.select(".risk-low")
         .append("div")
         .attr("class", "risk-text")
-        .text(indBarData.find(data => data.name === "Low").value)
+        .text(indBarData.find(data => data.name === "Low").value === undefined ? 0 : indBarData.find(data => data.name === "Low").value)
 
 
     d3.select(".risk-mod")
         .append("div")
         .attr("class", "risk-image")
-        .text(indBarData.find(data => data.name === "Moderate").value)
+        .text(indBarData.find(data => data.name === "Moderate").value === undefined ? 0 : indBarData.find(data => data.name === "Moderate").value)
 
     d3.select(".risk-high")
         .append("div")
         .attr("class", "risk-image")
-        .text(indBarData.find(data => data.name === "High").value)
+        .text(indBarData.find(data => data.name === "High").value === undefined ? 0 : indBarData.find(data => data.name === "High").value)
 }

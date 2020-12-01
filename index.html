@@ -16,8 +16,9 @@
     <link rel="stylesheet" href="styles/sunBurstStyles.css">
 
     <!--Font Awesome Icons-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
 </head>
 
 <body>
@@ -33,11 +34,12 @@
                     </div>
                 </div>
                 <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
-                    <small class="text-white">LATENCY</small>
+                    <small class="text-white">MARKOVIAN RELAXATION</small>
                 </li>
                 <div class="bg-dark list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-start align-items-center">
-                        <span class="fa fa-sliders fa-lg mr-4 text-white clickable" onclick="SidebarCollapse()"></span>
+                        <span class="fas fa-sliders-h fa-lg mr-4 text-white clickable"
+                            onclick="SidebarCollapse()"></span>
                         <span class="menu-collapsed">
                             <div class="slidecontainer">
                                 <div class="range-value" id="rangeV"></div>
@@ -151,6 +153,8 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3-require@1"></script>
     <script src='https://cdn.jsdelivr.net/lodash/4.17.2/lodash.min.js'></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+
 
     <!-- Custom Javascipt files-->
     <script src="scripts/visualization.js"></script>

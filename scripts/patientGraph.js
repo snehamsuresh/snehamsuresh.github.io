@@ -78,6 +78,11 @@ function showPatientGraph(data) {
       .attr("transform", d => `translate(${source.y0},${source.x0})`)
       .attr("fill-opacity", 0)
       .attr("stroke-opacity", 0)
+      .attr("class", (d) => {
+        if (d.depth == 0) {
+          return "root-node"
+        }
+      })
       .on("click", (event, d) => {
         d.children = d.children ? null : d._children;
         update(d);
@@ -86,7 +91,7 @@ function showPatientGraph(data) {
     nodeEnter.append("circle")
       .attr("r", 18)
       .attr("fill", d => d._children ? "#698a73" : "#bae8c9")
-      .attr("stroke-width", 10);
+      .attr("stroke-width", 10)
 
     nodeEnter.append("text")
       .style("font", "5.75px sans-serif")
@@ -114,6 +119,16 @@ function showPatientGraph(data) {
       .attr("stroke-linejoin", "round")
       .attr("stroke-width", 3)
       .attr("stroke", "white");
+
+    d3.selectAll('.root-node')
+      .append("text")
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central')
+      .attr("class", "fa")
+      .attr('font-size', '20px')
+      .text(function (d) {
+        return '\uf728'
+      });
 
 
     // Transition nodes to their new position.
@@ -202,8 +217,14 @@ Promise.all([d3.json("../data/patientDetails.json")])
     selectElement = document.getElementById("dropdownMenu")
     selectElement.onchange = function () {
       output = selectElement.value;
-      let selectedPatient = patientData.find(x => x.name === output)
-      showPatientGraph(selectedPatient);
+      if (output === 'Select a Patient') {
+        d3.select(".patient-svg").remove();
+        d3.select('.patient-text')
+          .text(`Select a Patient`);
+      } else {
+        let selectedPatient = patientData.find(x => x.name === output)
+        showPatientGraph(selectedPatient);
+      }
     }
 
   });
