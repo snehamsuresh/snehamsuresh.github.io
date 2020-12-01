@@ -1,11 +1,6 @@
-.bar-chart {
-    position: absolute;
-    margin-left: 300px;
-}
-
 .risk-factor {
-    float: right;
-    margin-top: 25px;
+    margin-top: 28px;
+    margin-right: 5px;
 }
 
 .risk-factor>div {
@@ -38,18 +33,13 @@
     padding-top: 40px;
     font-size: 20px;
     font-weight: 500;
+    opacity: 0.8;
 }
 
 .text-risk {
-    padding-top: 10px;
+    padding-top: 7px;
     font-size: 20px;
     font-weight: 500;
-}
-
-.container {
-    display: flex;
-}
-
-.container>div {
-    flex: 1;
+    padding-bottom: 20px;
+    opacity: 0.8;
 }

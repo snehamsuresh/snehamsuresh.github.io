@@ -19,7 +19,7 @@ body {
 }
 
 .sidebar-expanded {
-	width: 350px;
+	width: 275px;
 }
 
 .sidebar-collapsed {
@@ -41,10 +41,7 @@ body {
 	height: 25px;
 }
 
-#sidebar-container
-	.list-group
-	.list-group-item[aria-expanded="false"]
-	.submenu-icon::after {
+#sidebar-container .list-group .list-group-item[aria-expanded="false"] .submenu-icon::after {
 	content: " \f0d7";
 	font-family: FontAwesome;
 	display: inline;
@@ -53,10 +50,7 @@ body {
 	height: 100%;
 }
 
-#sidebar-container
-	.list-group
-	.list-group-item[aria-expanded="true"]
-	.submenu-icon::after {
+#sidebar-container .list-group .list-group-item[aria-expanded="true"] .submenu-icon::after {
 	content: " \f0da";
 	font-family: FontAwesome;
 	display: inline;
@@ -74,7 +68,7 @@ body {
 
 .slider {
 	-webkit-appearance: none;
-	width: 100%;
+	width: 80%;
 	height: 15px;
 	border-radius: 10px;
 	background: #d3d3d3;
@@ -222,7 +216,11 @@ div.tooltip {
 
 .sunburst-item {
 	grid-area: sunburst;
-	background-color: #6c757d;
+	background-color: #6c757e;
 	margin: 10px;
 	border-radius: 10px;
+}
+
+.patient-text {
+	margin-left: 150px;
 }

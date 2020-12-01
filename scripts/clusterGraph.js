@@ -92,9 +92,9 @@ const showClusterIndepthGraph = (id) => {
 		.force(
 			"link",
 			d3
-				.forceLink(linksIndepth)
-				.id((d) => d.id)
-				.distance(120)
+			.forceLink(linksIndepth)
+			.id((d) => d.id)
+			.distance(120)
 		)
 		.force("charge", d3.forceManyBody())
 		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2 + 20))
@@ -123,13 +123,13 @@ const showClusterIndepthGraph = (id) => {
 		})
 		.append("svg:path")
 		.attr("d", "M 0,-5 L 10 ,0 L 0,5")
-		.attr("fill", "#e2e2e2")
+		.attr("fill", "#e0e0e0")
 		.style("stroke", "none");
 
 	const linkClusterInDepth = svgClusterInDepth
 		.append("g")
-		.attr("stroke", "#e2e2e2")
-		.attr("stroke-opacity", 0.6)
+		.attr("stroke", "#e0e0e0")
+		.attr("stroke-opacity", 0.4)
 		.selectAll("line")
 		.data(linksIndepth)
 		.join("line")
@@ -141,12 +141,10 @@ const showClusterIndepthGraph = (id) => {
 		.selectAll("circle")
 		.data(nodesIndepth)
 		.join("circle")
-		.attr("stroke", "#e2e2e2")
-		// .attr("stroke-width", (d) => (d.source ? 3 : 1))
+		.attr("stroke", "#e0e0e0")
 		.attr("r", (d) => (d.source ? 10 : 5))
 		.attr("fill", colorCluster(id))
 		.on("click", (event, d) => {
-			console.log(id);
 			if (d.source)
 				toggleDisplay({
 					...d,
@@ -220,7 +218,6 @@ function generateData(i, variable, isSource) {
 }
 
 const showClusterSourceGraph = (data) => {
-	console.log(data);
 	const stNodeList = [];
 	const stLinksList = [];
 	nodesIndepth.forEach((dataIndepth) => {
@@ -262,18 +259,14 @@ const showClusterSourceGraph = (data) => {
 			});
 		}
 	});
-
-	console.log(stNodeList);
-	console.log(stLinksList);
-
 	const simulationClusterSTDepth = d3
 		.forceSimulation(stNodeList)
 		.force(
 			"link",
 			d3
-				.forceLink(stLinksList)
-				.id((d) => d.id)
-				.distance(150)
+			.forceLink(stLinksList)
+			.id((d) => d.id)
+			.distance(150)
 		)
 		.force("charge", d3.forceManyBody())
 		.force(
@@ -286,7 +279,6 @@ const showClusterSourceGraph = (data) => {
 		.select(".st-graph")
 		.append("svg")
 		.attr("id", "svgClusterSTDepth")
-		//.attr("viewBox", [0, 0, widthCluster + 100, heightCluster + 100]);
 		.attr("width", widthCluster + 100)
 		.attr("height", heightCluster + 100);
 
@@ -310,7 +302,7 @@ const showClusterSourceGraph = (data) => {
 
 	const linkClusterSTDepth = svgClusterSTDepth
 		.append("g")
-		.attr("stroke", "#e2e2e2")
+		.attr("stroke", "#e0e0e0")
 		.attr("stroke-opacity", 0.6)
 		.selectAll("line")
 		.data(stLinksList)
@@ -321,7 +313,6 @@ const showClusterSourceGraph = (data) => {
 	const nodeClusterSTDepth = svgClusterSTDepth
 		.append("g")
 		.attr("stroke", "#fff")
-		// .attr("stroke-width", 1.5)
 		.selectAll("circle")
 		.data(stNodeList)
 		.join("circle")
@@ -359,9 +350,9 @@ async function initClustersGraph() {
 		.force(
 			"link",
 			d3
-				.forceLink(dataCluster.links)
-				.id((d) => d.id)
-				.distance(150)
+			.forceLink(dataCluster.links)
+			.id((d) => d.id)
+			.distance(150)
 		)
 		.force("charge", d3.forceManyBody())
 		.force("center", d3.forceCenter(widthCluster / 2, heightCluster / 2));
@@ -382,8 +373,6 @@ async function initClustersGraph() {
 	};
 
 	backBtn.addEventListener("click", () => {
-		//toggleDisplay();
-		//d3.select("#svgClusterInDepth").remove();
 		if (clusterLevel == 2) {
 			backBtn.classList.add("d-none");
 			clusterGraphMain.classList.remove("d-none");
@@ -409,7 +398,7 @@ async function initClustersGraph() {
 	const linkCluster = svgCluster
 		.append("g")
 		.attr("stroke", "#e2e2e2")
-		.attr("stroke-opacity", 0.6)
+		.attr("stroke-opacity", 0.5)
 		.selectAll("line")
 		.data(dataCluster.links)
 		.join("line")
