@@ -154,6 +154,8 @@ function showPatientGraph(data) {
             return "#FFAA32"
           case "High":
             return "#E3005B"
+          default:
+            return "#E2E2E2"
         }
       }))
       .attr("d", d => {
