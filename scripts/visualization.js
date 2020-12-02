@@ -51,3 +51,11 @@ const toolTip = d3
 	.append('div')
 	.attr('class', 'tooltip')
 	.style('opacity', 0);
+
+$('.carousel').carousel({
+	interval: 5000
+})
+
+$(window).on('load', function () {
+	$('#clusterModal').modal('show');
+});
