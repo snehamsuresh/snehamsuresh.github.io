@@ -224,3 +224,16 @@ div.tooltip {
 .patient-text {
 	margin-left: 150px;
 }
+
+.modal-title {
+	color: var(--primary);
+	margin-left: 60px;
+}
+
+.caption-text {
+	font-size: 11px;
+}
+
+.close-button {
+	margin-right: 35%;
+}
